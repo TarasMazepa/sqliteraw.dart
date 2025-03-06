@@ -1,15 +1,21 @@
 name: sqliteraw
-description: A sample command-line application.
-version: 1.0.0
-# repository: https://github.com/my_org/my_repo
+description: SQLite raw dart ffi, no alterations, so you can use full SQLite C API
+version: 0.0.1-3490100
+repository: https://github.com/TarasMazepa/sqliteraw.dart
 
 environment:
   sdk: ^3.7.0
 
-# Add regular dependencies here.
 dependencies:
-  # path: ^1.8.0
+  ffi: ^2.1.4
 
 dev_dependencies:
+  ffigen: ^17.0.0
   lints: ^5.0.0
   test: ^1.24.0
+
+ffigen:
+  output: 'sqliteraw.dart'
+  headers:
+    entry-points:
+      - './assets/sqlite_amalgamation_3490100/sqlite3.h'
