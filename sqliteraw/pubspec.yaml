@@ -1,5 +1,5 @@
 name: sqliteraw
-description: A sample command-line application.
+description: SQLite raw dart ffi, no alterations, wo you can use full SQLite C API
 version: 0.0.1
 repository: https://github.com/TarasMazepa/sqliteraw.dart
 
