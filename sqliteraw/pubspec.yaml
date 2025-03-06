@@ -1,15 +1,13 @@
 name: sqliteraw
 description: A sample command-line application.
-version: 1.0.0
-# repository: https://github.com/my_org/my_repo
+version: 0.0.1
+repository: https://github.com/TarasMazepa/sqliteraw.dart
 
 environment:
   sdk: ^3.7.0
 
-# Add regular dependencies here.
 dependencies:
   ffi: ^2.1.4
-  # path: ^1.8.0
 
 dev_dependencies:
   ffigen: ^17.0.0
@@ -17,7 +15,7 @@ dev_dependencies:
   test: ^1.24.0
 
 ffigen:
-  output: 'generated_bindings.dart'
+  output: 'sqliteraw.dart'
   headers:
     entry-points:
       - './assets/sqlite_amalgamation_3490100/sqlite3.h'
