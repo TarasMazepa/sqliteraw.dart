@@ -48,6 +48,7 @@ jobs:
           cd sqliteraw
           dart pub get
           dart run ffigen
+          rm -rf sqliteraw/assets
 
       - name: Create Pull Request
         run: |
