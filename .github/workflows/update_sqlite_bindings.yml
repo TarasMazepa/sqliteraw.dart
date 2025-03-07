@@ -1,0 +1,77 @@
+name: Update SQLite Amalgamation
+
+on:
+  workflow_dispatch:  
+
+jobs:
+  check-and-update:
+    permissions: write-all
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Dart
+        uses: dart-lang/setup-dart@v1
+        with:
+          sdk: 'stable'
+
+      - name: Install dependencies
+        run: dart pub get
+        working-directory: sqliteraw
+
+      - name: Check latest SQLite version
+        id: latest_version
+        run: |
+          LATEST_VERSION=$(curl -s https://www.sqlite.org/download.html | grep -oP 'sqlite-amalgamation-\K\d+(?=\.zip)' | sort -nr | head -1)
+          echo "latest_version=$LATEST_VERSION" >> $GITHUB_OUTPUT
+          echo "Latest SQLite version: $LATEST_VERSION"
+
+      - name: Update SQLite
+        run: |
+          LATEST_VERSION=${{ steps.latest_version.outputs.latest_version }}
+          
+          mkdir -p sqliteraw/assets
+          wget -q https://www.sqlite.org/$(date +%Y)/sqlite-amalgamation-${LATEST_VERSION}.zip
+          unzip -q sqlite-amalgamation-${LATEST_VERSION}.zip
+          rm -rf sqliteraw/assets/sqlite_amalgamation_*
+          
+          mv sqlite-amalgamation-${LATEST_VERSION} sqliteraw/assets/sqlite_amalgamation_${LATEST_VERSION}
+          
+          sed -i "s/version: [0-9]\+\.[0-9]\+\.[0-9]\+-[0-9]\+/version: 0.0.1-${LATEST_VERSION}/g" sqliteraw/pubspec.yaml
+          
+          sed -i "s|./assets/sqlite_amalgamation_[0-9]*/sqlite3.h|./assets/sqlite_amalgamation_${LATEST_VERSION}/sqlite3.h|g" sqliteraw/pubspec.yaml
+
+      - name: Generate FFI bindings
+        run: |
+          cd sqliteraw
+          dart pub get
+          dart run ffigen
+
+      - name: Create Pull Request
+        run: |
+          if ! git diff --quiet; then
+            timestamp=$(date -u +"%Y-%m-%dT%H-%M-%S")
+            LATEST_VERSION=${{ steps.latest_version.outputs.latest_version }}
+            branch_name=update-sqlite-${LATEST_VERSION}-at-$timestamp
+            
+            git config --global user.name 'sqliteraw'
+            git config --global user.email 'sqliteraw@sqliteraw.com'
+            git checkout -b $branch_name
+            git add .
+            git commit -m "Update SQLite to version ${LATEST_VERSION}"
+            git push --set-upstream origin $branch_name
+            
+            gh pr create -B ${GITHUB_REF#refs/heads/} \
+              -t "Update SQLite to version ${LATEST_VERSION}" \
+              -b "This PR updates the SQLite amalgamation to version ${LATEST_VERSION}.
+              
+              Changes:
+              - Updated SQLite amalgamation source files
+              - Updated package version in pubspec.yaml
+              - Regenerated FFI bindings
+              
+              This PR was created automatically by the Update SQLite Amalgamation workflow."
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.PAT }} 
