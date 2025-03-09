@@ -1,0 +1,30 @@
+name: Compile SQLiteRaw Library
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, macos-latest, macos-13, windows-latest ]
+    
+    runs-on: ${{ matrix.os }}
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Dart SDK
+      uses: dart-lang/setup-dart@v1
+    
+    - name: Get dependencies
+      working-directory: ./sqliteraw
+      run: dart pub get
+    
+    - name: Compile SQLiteRaw
+      working-directory: ./sqliteraw
+      run: dart compile exe bin/sqliteraw.dart -o sqliteraw
