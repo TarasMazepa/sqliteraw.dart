@@ -76,4 +76,4 @@ jobs:
               This PR was created automatically by the Update SQLite Amalgamation workflow."
           fi
         env:
-          GH_TOKEN: ${{ secrets.PAT }} 
+          GH_TOKEN: ${{ secrets.PAT }}
