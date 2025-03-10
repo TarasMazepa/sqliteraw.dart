@@ -60,7 +60,7 @@ jobs:
             git config --global user.name 'sqliteraw'
             git config --global user.email 'sqliteraw@sqliteraw.com'
             git checkout -b $branch_name
-            git add .
+            git add sqliteraw/sqliteraw.dart
             git status
             git commit -m "Update SQLite to version ${LATEST_VERSION}"
             git push --set-upstream origin $branch_name
