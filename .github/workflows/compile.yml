@@ -16,14 +16,8 @@ jobs:
     
     steps:
     - uses: actions/checkout@v3
-    
-    - name: Setup Dart SDK
-      uses: dart-lang/setup-dart@v1
-    
-    - name: Get dependencies
+    - uses: dart-lang/setup-dart@v1
+    - run: dart pub get
       working-directory: ./sqliteraw
-      run: dart pub get
-    
-    - name: Compile SQLiteRaw
+    - run: dart compile exe bin/sqliteraw.dart -o sqliteraw
       working-directory: ./sqliteraw
-      run: dart compile exe bin/sqliteraw.dart -o sqliteraw
