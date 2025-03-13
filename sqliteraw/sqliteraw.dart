@@ -19,65 +19,6 @@ class NativeLibrary {
           lookup)
       : _lookup = lookup;
 
-  void __va_start(
-    ffi.Pointer<va_list> arg0,
-  ) {
-    return ___va_start(
-      arg0,
-    );
-  }
-
-  late final ___va_startPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<va_list>)>>(
-          '__va_start');
-  late final ___va_start =
-      ___va_startPtr.asFunction<void Function(ffi.Pointer<va_list>)>();
-
-  void __security_init_cookie() {
-    return ___security_init_cookie();
-  }
-
-  late final ___security_init_cookiePtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function()>>(
-          '__security_init_cookie');
-  late final ___security_init_cookie =
-      ___security_init_cookiePtr.asFunction<void Function()>();
-
-  void __security_check_cookie(
-    int _StackCookie,
-  ) {
-    return ___security_check_cookie(
-      _StackCookie,
-    );
-  }
-
-  late final ___security_check_cookiePtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.UintPtr)>>(
-          '__security_check_cookie');
-  late final ___security_check_cookie =
-      ___security_check_cookiePtr.asFunction<void Function(int)>();
-
-  void __report_gsfailure(
-    int _StackCookie,
-  ) {
-    return ___report_gsfailure(
-      _StackCookie,
-    );
-  }
-
-  late final ___report_gsfailurePtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.UintPtr)>>(
-          '__report_gsfailure');
-  late final ___report_gsfailure =
-      ___report_gsfailurePtr.asFunction<void Function(int)>();
-
-  late final ffi.Pointer<ffi.UintPtr> ___security_cookie =
-      _lookup<ffi.UintPtr>('__security_cookie');
-
-  int get __security_cookie => ___security_cookie.value;
-
-  set __security_cookie(int value) => ___security_cookie.value = value;
-
   late final ffi.Pointer<ffi.Pointer<ffi.Char>> _sqlite3_version =
       _lookup<ffi.Pointer<ffi.Char>>('sqlite3_version');
 
@@ -570,7 +511,7 @@ class NativeLibrary {
 
   ffi.Pointer<ffi.Char> sqlite3_vmprintf(
     ffi.Pointer<ffi.Char> arg0,
-    va_list arg1,
+    ffi.Pointer<__va_list_tag> arg1,
   ) {
     return _sqlite3_vmprintf(
       arg0,
@@ -580,10 +521,11 @@ class NativeLibrary {
 
   late final _sqlite3_vmprintfPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Pointer<ffi.Char> Function(
-              ffi.Pointer<ffi.Char>, va_list)>>('sqlite3_vmprintf');
+          ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>,
+              ffi.Pointer<__va_list_tag>)>>('sqlite3_vmprintf');
   late final _sqlite3_vmprintf = _sqlite3_vmprintfPtr.asFunction<
-      ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>, va_list)>();
+      ffi.Pointer<ffi.Char> Function(
+          ffi.Pointer<ffi.Char>, ffi.Pointer<__va_list_tag>)>();
 
   ffi.Pointer<ffi.Char> sqlite3_snprintf(
     int arg0,
@@ -609,7 +551,7 @@ class NativeLibrary {
     int arg0,
     ffi.Pointer<ffi.Char> arg1,
     ffi.Pointer<ffi.Char> arg2,
-    va_list arg3,
+    ffi.Pointer<__va_list_tag> arg3,
   ) {
     return _sqlite3_vsnprintf(
       arg0,
@@ -621,11 +563,14 @@ class NativeLibrary {
 
   late final _sqlite3_vsnprintfPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Pointer<ffi.Char> Function(ffi.Int, ffi.Pointer<ffi.Char>,
-              ffi.Pointer<ffi.Char>, va_list)>>('sqlite3_vsnprintf');
+          ffi.Pointer<ffi.Char> Function(
+              ffi.Int,
+              ffi.Pointer<ffi.Char>,
+              ffi.Pointer<ffi.Char>,
+              ffi.Pointer<__va_list_tag>)>>('sqlite3_vsnprintf');
   late final _sqlite3_vsnprintf = _sqlite3_vsnprintfPtr.asFunction<
-      ffi.Pointer<ffi.Char> Function(
-          int, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, va_list)>();
+      ffi.Pointer<ffi.Char> Function(int, ffi.Pointer<ffi.Char>,
+          ffi.Pointer<ffi.Char>, ffi.Pointer<__va_list_tag>)>();
 
   ffi.Pointer<ffi.Void> sqlite3_malloc(
     int arg0,
@@ -5112,7 +5057,7 @@ class NativeLibrary {
   void sqlite3_str_vappendf(
     ffi.Pointer<sqlite3_str> arg0,
     ffi.Pointer<ffi.Char> zFormat,
-    va_list arg2,
+    ffi.Pointer<__va_list_tag> arg2,
   ) {
     return _sqlite3_str_vappendf(
       arg0,
@@ -5124,10 +5069,10 @@ class NativeLibrary {
   late final _sqlite3_str_vappendfPtr = _lookup<
       ffi.NativeFunction<
           ffi.Void Function(ffi.Pointer<sqlite3_str>, ffi.Pointer<ffi.Char>,
-              va_list)>>('sqlite3_str_vappendf');
+              ffi.Pointer<__va_list_tag>)>>('sqlite3_str_vappendf');
   late final _sqlite3_str_vappendf = _sqlite3_str_vappendfPtr.asFunction<
-      void Function(
-          ffi.Pointer<sqlite3_str>, ffi.Pointer<ffi.Char>, va_list)>();
+      void Function(ffi.Pointer<sqlite3_str>, ffi.Pointer<ffi.Char>,
+          ffi.Pointer<__va_list_tag>)>();
 
   void sqlite3_str_append(
     ffi.Pointer<sqlite3_str> arg0,
@@ -6119,10 +6064,6 @@ class NativeLibrary {
                       ffi.Void Function(ffi.Pointer<ffi.Void>)>>)>();
 }
 
-typedef va_list = ffi.Pointer<ffi.Char>;
-typedef ptrdiff_t = ffi.LongLong;
-typedef Dartptrdiff_t = int;
-
 final class sqlite3 extends ffi.Opaque {}
 
 typedef sqlite_int64 = ffi.LongLong;
@@ -6291,6 +6232,18 @@ final class sqlite3_mem_methods extends ffi.Struct {
       xShutdown;
 
   external ffi.Pointer<ffi.Void> pAppData;
+}
+
+final class __va_list_tag extends ffi.Struct {
+  @ffi.UnsignedInt()
+  external int gp_offset;
+
+  @ffi.UnsignedInt()
+  external int fp_offset;
+
+  external ffi.Pointer<ffi.Void> overflow_arg_area;
+
+  external ffi.Pointer<ffi.Void> reg_save_area;
 }
 
 final class sqlite3_stmt extends ffi.Opaque {}
@@ -7098,34 +7051,6 @@ final class fts5_api extends ffi.Struct {
                   ffi.Pointer<ffi.Pointer<fts5_tokenizer_v2>> ppTokenizer)>>
       xFindTokenizer_v2;
 }
-
-const int _VCRT_COMPILER_PREPROCESSOR = 1;
-
-const int _SAL_VERSION = 20;
-
-const int __SAL_H_VERSION = 180000000;
-
-const int _USE_DECLSPECS_FOR_SAL = 0;
-
-const int _USE_ATTRIBUTES_FOR_SAL = 0;
-
-const int _CRT_PACKING = 8;
-
-const int _VCRUNTIME_DISABLED_WARNINGS = 4514;
-
-const int _HAS_EXCEPTIONS = 1;
-
-const int _WCHAR_T_DEFINED = 1;
-
-const int NULL = 0;
-
-const int _HAS_CXX17 = 0;
-
-const int _HAS_CXX20 = 0;
-
-const int _HAS_CXX23 = 0;
-
-const int _HAS_NODISCARD = 1;
 
 const String SQLITE_VERSION = '3.49.1';
 
