@@ -23,9 +23,8 @@ jobs:
           sed -i "s/version: \(.+\)-.+/version: \1-$VERSION/" sqliteraw/pubspec.yaml
 
           mkdir -p sqliteraw/.sqlite-source-code
-          cd sqliteraw/.sqlite-source-code
-          curl -o sqlite.zip $URL
-          unzip sqlite.zip -d .
+          curl -o sqliteraw/.sqlite-source-codesqlite.zip $URL
+          unzip sqliteraw/.sqlite-source-codesqlite.zip -d sqliteraw/.sqlite-source-code
 
       - uses: dart-lang/setup-dart@v1
         with:
