@@ -1,0 +1,53 @@
+name: update_sqlite_bindings.yml
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "51 20 * * *"
+
+jobs:
+  update_sqlite_bindings:
+    permissions: write-all
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare for ffi gen
+        id: prepare
+        run: |
+          URL="https://www.sqlite.org/$(curl -s https://www.sqlite.org/download.html | grep PRODUCT | grep sqlite-amalgamation | sed 's/[^,]*,[^,]*,\([^,]*\),.*/\1/')"
+          VERSION=$(echo $URL | sed 's/.*-//' | sed 's/.zip//')
+          echo "Latest SQLite download url: $URL"
+          echo "Latest SQLite version: $VERSION"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          
+          sed -i "s/version: \(.+\)-.+/version: \1-$VERSION/" sqliteraw/pubspec.yaml
+
+          mkdir -p sqliteraw/.sqlite-source-code
+          cd sqliteraw/.sqlite-source-code
+          curl -o sqlite.zip $URL
+          unzip sqlite.zip -d .
+
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: '3.7.1'
+
+      - run: dart run ffigen
+        working-directory: sqliteraw
+
+      - name: Create Pull Request
+        run: |
+          if ! git diff --quiet; then
+            VERSION=${{ steps.prepare.outputs.version }}
+            branch_name=update-sqlite-to-${VERSION}-at-$(date -u +"%Y-%m-%dT%H-%M-%S")
+
+            git config --global user.name 'sqliteraw'
+            git config --global user.email 'sqliteraw@sqliteraw.com'
+            git checkout -b $branch_name
+            git add .
+            git status
+            git commit -m "Update SQLite to ${VERSION}"
+            git push --set-upstream origin $branch_name
+            gh pr merge $(gh pr create -B main -f) --auto --squash
+          fi
+        env:
+          GH_TOKEN: ${{ secrets.CREATE_PULL_REQUEST_PAT }}
