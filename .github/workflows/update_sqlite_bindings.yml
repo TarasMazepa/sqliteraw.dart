@@ -26,6 +26,8 @@ jobs:
           cd sqliteraw/.sqlite-source-code
           curl -o sqlite.zip $URL
           unzip -j sqlite.zip *sqlite3.h
+          pwd
+          ls
 
       - uses: dart-lang/setup-dart@v1
         with:
