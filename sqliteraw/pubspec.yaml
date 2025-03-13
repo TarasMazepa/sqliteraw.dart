@@ -15,7 +15,7 @@ dev_dependencies:
   test: ^1.24.0
 
 ffigen:
-  output: 'sqliteraw.dart'
+  output: 'lib/sqliteraw.dart'
   headers:
     entry-points:
       - '.sqlite-source-code/sqlite3.h'
