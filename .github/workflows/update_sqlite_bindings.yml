@@ -14,7 +14,7 @@ jobs:
       - name: Prepare for ffi gen
         id: prepare
         run: |
-          URL="https://www.sqlite.org/$(curl -s https://www.sqlite.org/download.html | grep PRODUCT | grep sqlite-amalgamation | sed 's/[^,]*,[^,]*,\([^,]*\),.*/\1/')"
+          URL="https://www.sqlite.org/$(curl -s https://sqlite.org/download.html | grep PRODUCT | grep sqlite-amalgamation | sed 's/[^,]*,[^,]*,\([^,]*\),.*/\1/')"
           VERSION=$(echo $URL | sed 's/.*-//' | sed 's/.zip//')
           echo "Latest SQLite download url: $URL"
           echo "Latest SQLite version: $VERSION"
