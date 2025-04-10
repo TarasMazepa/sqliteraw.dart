@@ -25,8 +25,22 @@ jobs:
 
           mkdir -p sqliteraw/.sqlite-source-code
           cd sqliteraw/.sqlite-source-code
-          curl -o sqlite.zip $URL
-          unzip -j sqlite.zip *sqlite3.h
+          curl -L -o sqlite.zip $URL
+          if [ ! -f sqlite.zip ]; then
+            echo "Failed to download SQLite"
+            exit 1
+          fi
+          
+          if ! unzip -j sqlite.zip "*sqlite3.h"; then
+            echo "Failed to unzip SQLite"
+            exit 1
+          fi
+          
+          if [ ! -f sqlite3.h ]; then
+            echo "sqlite3.h not found after unzip"
+            exit 1
+          fi
+          
           pwd
           ls
 
