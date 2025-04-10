@@ -4,7 +4,7 @@ version: 0.0.1-3490100
 repository: https://github.com/TarasMazepa/sqliteraw.dart
 
 environment:
-  sdk: ^3.7.0
+  sdk: ^3.7.1
 
 dependencies:
   ffi: ^2.1.4
