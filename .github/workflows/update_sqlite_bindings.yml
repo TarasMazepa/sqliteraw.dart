@@ -1,7 +1,6 @@
 name: update_sqlite_bindings.yml
 
 on:
-  pull_request: 
   workflow_dispatch:
   schedule:
     - cron: "51 20 * * *"
