@@ -443,6 +443,25 @@ class NativeLibrary {
   late final _sqlite3_busy_timeout = _sqlite3_busy_timeoutPtr
       .asFunction<int Function(ffi.Pointer<sqlite3>, int)>();
 
+  int sqlite3_setlk_timeout(
+    ffi.Pointer<sqlite3> arg0,
+    int ms,
+    int flags,
+  ) {
+    return _sqlite3_setlk_timeout(
+      arg0,
+      ms,
+      flags,
+    );
+  }
+
+  late final _sqlite3_setlk_timeoutPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int Function(ffi.Pointer<sqlite3>, ffi.Int,
+              ffi.Int)>>('sqlite3_setlk_timeout');
+  late final _sqlite3_setlk_timeout = _sqlite3_setlk_timeoutPtr
+      .asFunction<int Function(ffi.Pointer<sqlite3>, int, int)>();
+
   int sqlite3_get_table(
     ffi.Pointer<sqlite3> db,
     ffi.Pointer<ffi.Char> zSql,
@@ -7052,12 +7071,12 @@ final class fts5_api extends ffi.Struct {
       xFindTokenizer_v2;
 }
 
-const String SQLITE_VERSION = '3.49.2';
+const String SQLITE_VERSION = '3.50.0';
 
-const int SQLITE_VERSION_NUMBER = 3049002;
+const int SQLITE_VERSION_NUMBER = 3050000;
 
 const String SQLITE_SOURCE_ID =
-    '2025-05-07 10:39:52 17144570b0d96ae63cd6f3edca39e27ebd74925252bbaf6723bcb2f6b4861fb1';
+    '2025-05-29 14:26:00 dfc790f998f450d9c35e3ba1c8c89c17466cb559f87b0239e4aab9d34e28f742';
 
 const int SQLITE_OK = 0;
 
@@ -7453,6 +7472,8 @@ const int SQLITE_FCNTL_RESET_CACHE = 42;
 
 const int SQLITE_FCNTL_NULL_IO = 43;
 
+const int SQLITE_FCNTL_BLOCK_ON_CONNECT = 44;
+
 const int SQLITE_GET_LOCKPROXYFILE = 2;
 
 const int SQLITE_SET_LOCKPROXYFILE = 3;
@@ -7580,6 +7601,8 @@ const int SQLITE_DBCONFIG_ENABLE_ATTACH_WRITE = 1021;
 const int SQLITE_DBCONFIG_ENABLE_COMMENTS = 1022;
 
 const int SQLITE_DBCONFIG_MAX = 1022;
+
+const int SQLITE_SETLK_BLOCK_ON_CONNECT = 1;
 
 const int SQLITE_DENY = 1;
 
