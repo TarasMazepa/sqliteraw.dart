@@ -22,7 +22,7 @@ jobs:
 
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
-          sed -i "s/version: \(.+\)-.+/version: \1-$VERSION/" sqliteraw/pubspec.yaml
+          sed -i -E "s/version: ([^ -]+)-.*/version: \1-$VERSION/" sqliteraw/pubspec.yaml
           echo $VERSION > VERSION
 
           mkdir -p sqlite
