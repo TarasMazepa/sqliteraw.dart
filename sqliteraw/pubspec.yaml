@@ -18,4 +18,4 @@ ffigen:
   output: 'lib/sqliteraw.dart'
   headers:
     entry-points:
-      - '.sqlite-source-code/sqlite3.h'
+      - '../sqlite/sqlite3.h'
