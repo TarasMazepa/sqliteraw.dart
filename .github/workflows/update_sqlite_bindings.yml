@@ -28,7 +28,7 @@ jobs:
           mkdir -p sqlite
           cd sqlite
           curl -L -o sqlite.zip $URL
-          unzip -j sqlite.zip
+          unzip -o -j sqlite.zip
           rm sqlite.zip
           pwd
           ls
