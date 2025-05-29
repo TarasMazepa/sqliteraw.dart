@@ -11,35 +11,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Prepare for ffi gen
+      - name: Download sqlite amalgamation source code
         id: prepare
         run: |
           URL="https://sqlite.org/$(curl -s https://sqlite.org/download.html | grep PRODUCT | grep sqlite-amalgamation | sed 's/[^,]*,[^,]*,\([^,]*\),.*/\1/')"
           VERSION=$(echo $URL | sed 's/.*-//' | sed 's/.zip//')
-          echo "Latest SQLite download url: $URL"
-          echo "Latest SQLite version: $VERSION"
+
+          echo "Url: $URL"
+          echo "Version: $VERSION"
+
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-          
+
           sed -i "s/version: \(.+\)-.+/version: \1-$VERSION/" sqliteraw/pubspec.yaml
+          echo $VERSION > VERSION
 
           mkdir -p sqliteraw/.sqlite-source-code
           cd sqliteraw/.sqlite-source-code
           curl -L -o sqlite.zip $URL
-          if [ ! -f sqlite.zip ]; then
-            echo "Failed to download SQLite"
-            exit 1
-          fi
-          
-          if ! unzip -j sqlite.zip "*sqlite3.h"; then
-            echo "Failed to unzip SQLite"
-            exit 1
-          fi
-          
-          if [ ! -f sqlite3.h ]; then
-            echo "sqlite3.h not found after unzip"
-            exit 1
-          fi
-          
+          unzip -j sqlite.zip
           pwd
           ls
 
