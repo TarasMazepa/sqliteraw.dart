@@ -25,8 +25,8 @@ jobs:
           sed -i "s/version: \(.+\)-.+/version: \1-$VERSION/" sqliteraw/pubspec.yaml
           echo $VERSION > VERSION
 
-          mkdir -p sqliteraw/.sqlite-source-code
-          cd sqliteraw/.sqlite-source-code
+          mkdir -p sqlite
+          cd sqlite
           curl -L -o sqlite.zip $URL
           unzip -j sqlite.zip
           rm sqlite.zip
