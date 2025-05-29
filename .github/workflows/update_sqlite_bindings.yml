@@ -31,6 +31,7 @@ jobs:
           unzip -j sqlite.zip
           pwd
           ls
+          git add --intent-to-add .
 
       - uses: dart-lang/setup-dart@v1
         with:
