@@ -1,4 +1,4 @@
-name: sqliteraw
+name: sqliteraw.dart
 description: SQLite raw dart ffi, no alterations, so you can use full SQLite C API
 version: 0.0.1-3500000
 repository: https://github.com/TarasMazepa/sqliteraw.dart
