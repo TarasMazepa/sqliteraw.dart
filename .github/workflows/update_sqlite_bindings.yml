@@ -27,8 +27,8 @@ jobs:
 
           mkdir -p sqliteraw/.sqlite-source-code
           cd sqliteraw/.sqlite-source-code
-          curl -L -o sqlite.zip $URL
-          unzip -j sqlite.zip
+          curl -L -o ../sqlite.zip $URL
+          unzip -j ../sqlite.zip
           pwd
           ls
           git add --intent-to-add .
