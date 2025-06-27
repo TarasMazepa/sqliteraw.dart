@@ -18,21 +18,25 @@ jobs:
             platform_dir: linux-x86_64
             lib_name: sqlite3.so
             exe_name: sqlite3
+            extra_flags: "-lpthread -ldl -lm"
           - os: windows-latest
             target: x86_64-windows-gnu
             platform_dir: windows-x86_64
             lib_name: sqlite3.dll
             exe_name: sqlite3.exe
+            extra_flags: ""
           - os: macos-latest
             target: x86_64-macos-none
             platform_dir: macos-x86_64
             lib_name: sqlite3.dylib
             exe_name: sqlite3
+            extra_flags: "-lpthread -ldl -lm"
           - os: macos-latest
             target: aarch64-macos-none
             platform_dir: macos-aarch64
             lib_name: sqlite3.dylib
             exe_name: sqlite3
+            extra_flags: "-lpthread -ldl -lm"
 
     steps:
     - name: Checkout repository
@@ -46,13 +50,55 @@ jobs:
     - name: Create build directory
       run: mkdir -p build/${{ matrix.platform_dir }}
 
+    - name: Verify SQLite source files
+      run: |
+        ls -la sqlite/
+        test -f sqlite/sqlite3.c || (echo "sqlite3.c not found" && exit 1)
+        test -f sqlite/sqlite3.h || (echo "sqlite3.h not found" && exit 1)
+        test -f sqlite/shell.c || (echo "shell.c not found" && exit 1)
+
     - name: Compile SQLite shared library
       run: |
-        zig cc -target ${{ matrix.target }} -shared sqlite/sqlite3.c -o build/${{ matrix.platform_dir }}/${{ matrix.lib_name }}
+        zig cc -target ${{ matrix.target }} \
+          -shared \
+          -O3 \
+          -DSQLITE_ENABLE_FTS4 \
+          -DSQLITE_ENABLE_FTS5 \
+          -DSQLITE_ENABLE_JSON1 \
+          -DSQLITE_ENABLE_RTREE \
+          -DSQLITE_ENABLE_GEOPOLY \
+          sqlite/sqlite3.c \
+          ${{ matrix.extra_flags }} \
+          -o build/${{ matrix.platform_dir }}/${{ matrix.lib_name }}
 
     - name: Compile SQLite shell executable
       run: |
-        zig cc -target ${{ matrix.target }} sqlite/sqlite3.c sqlite/shell.c -o build/${{ matrix.platform_dir }}/${{ matrix.exe_name }}
+        zig cc -target ${{ matrix.target }} \
+          -O3 \
+          -DSQLITE_ENABLE_FTS4 \
+          -DSQLITE_ENABLE_FTS5 \
+          -DSQLITE_ENABLE_JSON1 \
+          -DSQLITE_ENABLE_RTREE \
+          -DSQLITE_ENABLE_GEOPOLY \
+          sqlite/sqlite3.c sqlite/shell.c \
+          ${{ matrix.extra_flags }} \
+          -o build/${{ matrix.platform_dir }}/${{ matrix.exe_name }}
+
+    - name: Verify build artifacts
+      run: |
+        ls -la build/${{ matrix.platform_dir }}/
+        file build/${{ matrix.platform_dir }}/${{ matrix.lib_name }}
+        file build/${{ matrix.platform_dir }}/${{ matrix.exe_name }}
+
+    - name: Test SQLite executable
+      if: runner.os != 'Windows'
+      run: |
+        build/${{ matrix.platform_dir }}/${{ matrix.exe_name }} --version
+
+    - name: Test SQLite executable (Windows)
+      if: runner.os == 'Windows'
+      run: |
+        build/${{ matrix.platform_dir }}/${{ matrix.exe_name }} --version
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
