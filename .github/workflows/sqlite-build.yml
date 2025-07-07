@@ -1,4 +1,4 @@
-name: Build SQLite Binaries
+name: sqlite-build.yml
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  sqlite-build:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -39,11 +39,9 @@ jobs:
             extra_flags: "-lpthread -ldl -lm"
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v4
+    - uses: actions/checkout@v4
 
-    - name: Set up Zig
-      uses: mlugg/setup-zig@v2
+    - uses: mlugg/setup-zig@v2
       with:
         version: 0.14.1
 
@@ -64,7 +62,6 @@ jobs:
           -O3 \
           -DSQLITE_ENABLE_FTS4 \
           -DSQLITE_ENABLE_FTS5 \
-          -DSQLITE_ENABLE_JSON1 \
           -DSQLITE_ENABLE_RTREE \
           -DSQLITE_ENABLE_GEOPOLY \
           sqlite/sqlite3.c \
@@ -77,7 +74,6 @@ jobs:
           -O3 \
           -DSQLITE_ENABLE_FTS4 \
           -DSQLITE_ENABLE_FTS5 \
-          -DSQLITE_ENABLE_JSON1 \
           -DSQLITE_ENABLE_RTREE \
           -DSQLITE_ENABLE_GEOPOLY \
           sqlite/sqlite3.c sqlite/shell.c \
@@ -91,12 +87,6 @@ jobs:
         file build/${{ matrix.platform_dir }}/${{ matrix.exe_name }}
 
     - name: Test SQLite executable
-      if: runner.os != 'Windows'
-      run: |
-        build/${{ matrix.platform_dir }}/${{ matrix.exe_name }} --version
-
-    - name: Test SQLite executable (Windows)
-      if: runner.os == 'Windows'
       run: |
         build/${{ matrix.platform_dir }}/${{ matrix.exe_name }} --version
 
