@@ -48,13 +48,6 @@ jobs:
     - name: Create build directory
       run: mkdir -p build/${{ matrix.platform_dir }}
 
-    - name: Verify SQLite source files
-      run: |
-        ls -la sqlite/
-        test -f sqlite/sqlite3.c || (echo "sqlite3.c not found" && exit 1)
-        test -f sqlite/sqlite3.h || (echo "sqlite3.h not found" && exit 1)
-        test -f sqlite/shell.c || (echo "shell.c not found" && exit 1)
-
     - name: Compile SQLite shared library
       run: |
         zig cc -target ${{ matrix.target }} \
