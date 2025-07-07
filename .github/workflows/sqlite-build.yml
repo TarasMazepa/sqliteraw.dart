@@ -7,6 +7,18 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
 
+env:
+  # Common SQLite compile-time options based on official documentation
+  SQLITE_CFLAGS: >-
+    -O3
+    -DSQLITE_ENABLE_FTS4
+    -DSQLITE_ENABLE_FTS5
+    -DSQLITE_ENABLE_RTREE
+    -DSQLITE_ENABLE_GEOPOLY
+  
+  # Unix/Linux linking flags
+  UNIX_LDFLAGS: "-lpthread -ldl -lm"
+
 jobs:
   sqlite-build:
     runs-on: ubuntu-latest
@@ -14,9 +26,14 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - uses: mlugg/setup-zig@v2
-      with:
-        version: 0.14.1
+    - name: Install cross-compilation toolchains
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          clang \
+          lld \
+          gcc-mingw-w64-x86-64 \
+          libc6-dev-i386
 
     - name: Create build directories
       run: |
@@ -28,103 +45,71 @@ jobs:
     # Linux x86_64 build
     - name: Compile SQLite for Linux x86_64 (shared library)
       run: |
-        zig cc -target x86_64-linux-gnu \
+        clang --target=x86_64-linux-gnu \
           -shared \
-          -O3 \
-          -DSQLITE_ENABLE_FTS4 \
-          -DSQLITE_ENABLE_FTS5 \
-          -DSQLITE_ENABLE_RTREE \
-          -DSQLITE_ENABLE_GEOPOLY \
+          ${{ env.SQLITE_CFLAGS }} \
           sqlite/sqlite3.c \
-          -lpthread -ldl -lm \
+          ${{ env.UNIX_LDFLAGS }} \
           -o build/linux-x86_64/sqlite3.so
 
     - name: Compile SQLite for Linux x86_64 (executable)
       run: |
-        zig cc -target x86_64-linux-gnu \
-          -O3 \
-          -DSQLITE_ENABLE_FTS4 \
-          -DSQLITE_ENABLE_FTS5 \
-          -DSQLITE_ENABLE_RTREE \
-          -DSQLITE_ENABLE_GEOPOLY \
+        clang --target=x86_64-linux-gnu \
+          ${{ env.SQLITE_CFLAGS }} \
           sqlite/sqlite3.c sqlite/shell.c \
-          -lpthread -ldl -lm \
+          ${{ env.UNIX_LDFLAGS }} \
           -o build/linux-x86_64/sqlite3
 
-    # Windows x86_64 build
+    # Windows x86_64 build (using MinGW)
     - name: Compile SQLite for Windows x86_64 (shared library)
       run: |
-        zig cc -target x86_64-windows-gnu \
+        clang --target=x86_64-w64-mingw32 \
           -shared \
-          -O3 \
-          -DSQLITE_ENABLE_FTS4 \
-          -DSQLITE_ENABLE_FTS5 \
-          -DSQLITE_ENABLE_RTREE \
-          -DSQLITE_ENABLE_GEOPOLY \
+          ${{ env.SQLITE_CFLAGS }} \
           sqlite/sqlite3.c \
           -o build/windows-x86_64/sqlite3.dll
 
     - name: Compile SQLite for Windows x86_64 (executable)
       run: |
-        zig cc -target x86_64-windows-gnu \
-          -O3 \
-          -DSQLITE_ENABLE_FTS4 \
-          -DSQLITE_ENABLE_FTS5 \
-          -DSQLITE_ENABLE_RTREE \
-          -DSQLITE_ENABLE_GEOPOLY \
+        clang --target=x86_64-w64-mingw32 \
+          ${{ env.SQLITE_CFLAGS }} \
           sqlite/sqlite3.c sqlite/shell.c \
           -o build/windows-x86_64/sqlite3.exe
 
     # macOS x86_64 build
     - name: Compile SQLite for macOS x86_64 (shared library)
       run: |
-        zig cc -target x86_64-macos-none \
+        clang --target=x86_64-apple-darwin \
           -shared \
-          -O3 \
-          -DSQLITE_ENABLE_FTS4 \
-          -DSQLITE_ENABLE_FTS5 \
-          -DSQLITE_ENABLE_RTREE \
-          -DSQLITE_ENABLE_GEOPOLY \
+          ${{ env.SQLITE_CFLAGS }} \
           sqlite/sqlite3.c \
-          -lpthread -ldl -lm \
+          ${{ env.UNIX_LDFLAGS }} \
           -o build/macos-x86_64/sqlite3.dylib
 
     - name: Compile SQLite for macOS x86_64 (executable)
       run: |
-        zig cc -target x86_64-macos-none \
-          -O3 \
-          -DSQLITE_ENABLE_FTS4 \
-          -DSQLITE_ENABLE_FTS5 \
-          -DSQLITE_ENABLE_RTREE \
-          -DSQLITE_ENABLE_GEOPOLY \
+        clang --target=x86_64-apple-darwin \
+          ${{ env.SQLITE_CFLAGS }} \
           sqlite/sqlite3.c sqlite/shell.c \
-          -lpthread -ldl -lm \
+          ${{ env.UNIX_LDFLAGS }} \
           -o build/macos-x86_64/sqlite3
 
     # macOS ARM64 build
     - name: Compile SQLite for macOS ARM64 (shared library)
       run: |
-        zig cc -target aarch64-macos-none \
+        clang --target=aarch64-apple-darwin \
           -shared \
-          -O3 \
-          -DSQLITE_ENABLE_FTS4 \
-          -DSQLITE_ENABLE_FTS5 \
-          -DSQLITE_ENABLE_RTREE \
-          -DSQLITE_ENABLE_GEOPOLY \
+          ${{ env.SQLITE_CFLAGS }} \
           sqlite/sqlite3.c \
-          -lpthread -ldl -lm \
+          ${{ env.UNIX_LDFLAGS }} \
           -o build/macos-aarch64/sqlite3.dylib
 
     - name: Compile SQLite for macOS ARM64 (executable)
       run: |
-        zig cc -target aarch64-macos-none \
-          -O3 \
-          -DSQLITE_ENABLE_FTS4 \
-          -DSQLITE_ENABLE_FTS5 \
-          -DSQLITE_ENABLE_RTREE \
-          -DSQLITE_ENABLE_GEOPOLY \
+        clang --target=aarch64-apple-darwin \
+          ${{ env.SQLITE_CFLAGS }} \
           sqlite/sqlite3.c sqlite/shell.c \
-          -lpthread -ldl -lm \
+          ${{ env.UNIX_LDFLAGS }} \
           -o build/macos-aarch64/sqlite3
 
     - name: Verify all build artifacts
