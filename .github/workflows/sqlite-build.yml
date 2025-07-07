@@ -9,34 +9,7 @@ on:
 
 jobs:
   sqlite-build:
-    runs-on: ${{ matrix.os }}
-    strategy:
-      matrix:
-        include:
-          - os: ubuntu-latest
-            target: x86_64-linux-gnu
-            platform_dir: linux-x86_64
-            lib_name: sqlite3.so
-            exe_name: sqlite3
-            extra_flags: "-lpthread -ldl -lm"
-          - os: windows-latest
-            target: x86_64-windows-gnu
-            platform_dir: windows-x86_64
-            lib_name: sqlite3.dll
-            exe_name: sqlite3.exe
-            extra_flags: ""
-          - os: macos-latest
-            target: x86_64-macos-none
-            platform_dir: macos-x86_64
-            lib_name: sqlite3.dylib
-            exe_name: sqlite3
-            extra_flags: "-lpthread -ldl -lm"
-          - os: macos-latest
-            target: aarch64-macos-none
-            platform_dir: macos-aarch64
-            lib_name: sqlite3.dylib
-            exe_name: sqlite3
-            extra_flags: "-lpthread -ldl -lm"
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
@@ -45,12 +18,17 @@ jobs:
       with:
         version: 0.14.1
 
-    - name: Create build directory
-      run: mkdir -p build/${{ matrix.platform_dir }}
-
-    - name: Compile SQLite shared library
+    - name: Create build directories
       run: |
-        zig cc -target ${{ matrix.target }} \
+        mkdir -p build/linux-x86_64
+        mkdir -p build/windows-x86_64
+        mkdir -p build/macos-x86_64
+        mkdir -p build/macos-aarch64
+
+    # Linux x86_64 build
+    - name: Compile SQLite for Linux x86_64 (shared library)
+      run: |
+        zig cc -target x86_64-linux-gnu \
           -shared \
           -O3 \
           -DSQLITE_ENABLE_FTS4 \
@@ -58,27 +36,119 @@ jobs:
           -DSQLITE_ENABLE_RTREE \
           -DSQLITE_ENABLE_GEOPOLY \
           sqlite/sqlite3.c \
-          ${{ matrix.extra_flags }} \
-          -o build/${{ matrix.platform_dir }}/${{ matrix.lib_name }}
+          -lpthread -ldl -lm \
+          -o build/linux-x86_64/sqlite3.so
 
-    - name: Compile SQLite shell executable
+    - name: Compile SQLite for Linux x86_64 (executable)
       run: |
-        zig cc -target ${{ matrix.target }} \
+        zig cc -target x86_64-linux-gnu \
           -O3 \
           -DSQLITE_ENABLE_FTS4 \
           -DSQLITE_ENABLE_FTS5 \
           -DSQLITE_ENABLE_RTREE \
           -DSQLITE_ENABLE_GEOPOLY \
           sqlite/sqlite3.c sqlite/shell.c \
-          ${{ matrix.extra_flags }} \
-          -o build/${{ matrix.platform_dir }}/${{ matrix.exe_name }}
+          -lpthread -ldl -lm \
+          -o build/linux-x86_64/sqlite3
 
-    - name: Verify build artifacts
+    # Windows x86_64 build
+    - name: Compile SQLite for Windows x86_64 (shared library)
       run: |
-        ls -la build/${{ matrix.platform_dir }}/
-        file build/${{ matrix.platform_dir }}/${{ matrix.lib_name }}
-        file build/${{ matrix.platform_dir }}/${{ matrix.exe_name }}
+        zig cc -target x86_64-windows-gnu \
+          -shared \
+          -O3 \
+          -DSQLITE_ENABLE_FTS4 \
+          -DSQLITE_ENABLE_FTS5 \
+          -DSQLITE_ENABLE_RTREE \
+          -DSQLITE_ENABLE_GEOPOLY \
+          sqlite/sqlite3.c \
+          -o build/windows-x86_64/sqlite3.dll
 
-    - name: Test SQLite executable
+    - name: Compile SQLite for Windows x86_64 (executable)
       run: |
-        build/${{ matrix.platform_dir }}/${{ matrix.exe_name }} --version
+        zig cc -target x86_64-windows-gnu \
+          -O3 \
+          -DSQLITE_ENABLE_FTS4 \
+          -DSQLITE_ENABLE_FTS5 \
+          -DSQLITE_ENABLE_RTREE \
+          -DSQLITE_ENABLE_GEOPOLY \
+          sqlite/sqlite3.c sqlite/shell.c \
+          -o build/windows-x86_64/sqlite3.exe
+
+    # macOS x86_64 build
+    - name: Compile SQLite for macOS x86_64 (shared library)
+      run: |
+        zig cc -target x86_64-macos-none \
+          -shared \
+          -O3 \
+          -DSQLITE_ENABLE_FTS4 \
+          -DSQLITE_ENABLE_FTS5 \
+          -DSQLITE_ENABLE_RTREE \
+          -DSQLITE_ENABLE_GEOPOLY \
+          sqlite/sqlite3.c \
+          -lpthread -ldl -lm \
+          -o build/macos-x86_64/sqlite3.dylib
+
+    - name: Compile SQLite for macOS x86_64 (executable)
+      run: |
+        zig cc -target x86_64-macos-none \
+          -O3 \
+          -DSQLITE_ENABLE_FTS4 \
+          -DSQLITE_ENABLE_FTS5 \
+          -DSQLITE_ENABLE_RTREE \
+          -DSQLITE_ENABLE_GEOPOLY \
+          sqlite/sqlite3.c sqlite/shell.c \
+          -lpthread -ldl -lm \
+          -o build/macos-x86_64/sqlite3
+
+    # macOS ARM64 build
+    - name: Compile SQLite for macOS ARM64 (shared library)
+      run: |
+        zig cc -target aarch64-macos-none \
+          -shared \
+          -O3 \
+          -DSQLITE_ENABLE_FTS4 \
+          -DSQLITE_ENABLE_FTS5 \
+          -DSQLITE_ENABLE_RTREE \
+          -DSQLITE_ENABLE_GEOPOLY \
+          sqlite/sqlite3.c \
+          -lpthread -ldl -lm \
+          -o build/macos-aarch64/sqlite3.dylib
+
+    - name: Compile SQLite for macOS ARM64 (executable)
+      run: |
+        zig cc -target aarch64-macos-none \
+          -O3 \
+          -DSQLITE_ENABLE_FTS4 \
+          -DSQLITE_ENABLE_FTS5 \
+          -DSQLITE_ENABLE_RTREE \
+          -DSQLITE_ENABLE_GEOPOLY \
+          sqlite/sqlite3.c sqlite/shell.c \
+          -lpthread -ldl -lm \
+          -o build/macos-aarch64/sqlite3
+
+    - name: Verify all build artifacts
+      run: |
+        echo "=== Linux x86_64 ==="
+        ls -la build/linux-x86_64/
+        file build/linux-x86_64/sqlite3.so
+        file build/linux-x86_64/sqlite3
+        
+        echo "=== Windows x86_64 ==="
+        ls -la build/windows-x86_64/
+        file build/windows-x86_64/sqlite3.dll
+        file build/windows-x86_64/sqlite3.exe
+        
+        echo "=== macOS x86_64 ==="
+        ls -la build/macos-x86_64/
+        file build/macos-x86_64/sqlite3.dylib
+        file build/macos-x86_64/sqlite3
+        
+        echo "=== macOS ARM64 ==="
+        ls -la build/macos-aarch64/
+        file build/macos-aarch64/sqlite3.dylib
+        file build/macos-aarch64/sqlite3
+
+    - name: Test Linux SQLite executable
+      run: |
+        build/linux-x86_64/sqlite3 --version
