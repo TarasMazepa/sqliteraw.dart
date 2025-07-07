@@ -1,4 +1,4 @@
-name: update_sqlite_bindings.yml
+name: update-sqlite-bindings.yml
 
 on:
   workflow_dispatch:
@@ -6,7 +6,7 @@ on:
     - cron: "51 20 * * *"
 
 jobs:
-  update_sqlite_bindings:
+  update-sqlite-bindings:
     permissions: write-all
     runs-on: ubuntu-latest
     steps:
