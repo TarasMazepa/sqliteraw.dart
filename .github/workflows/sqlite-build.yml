@@ -82,9 +82,3 @@ jobs:
     - name: Test SQLite executable
       run: |
         build/${{ matrix.platform_dir }}/${{ matrix.exe_name }} --version
-
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: build-${{ matrix.platform_dir }}
-        path: build/${{ matrix.platform_dir }}/ 
