@@ -1,0 +1,12 @@
+name: dart
+
+environment:
+  sdk: ^3.8.1
+
+dependencies:
+  sqliteraw.dart:
+    path: '../../sqliteraw'
+
+dev_dependencies:
+  lints: ^5.0.0
+  test: ^1.24.0
