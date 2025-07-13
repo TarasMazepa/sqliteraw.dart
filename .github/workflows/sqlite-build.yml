@@ -9,7 +9,7 @@ on:
 
 env:
   # Common SQLite compile-time options based on official documentation
-  SQLITE_CFLAGS: >-
+  SQLITE_COMPILE_TIME_OPTIONS: >-
     -O3
     -DSQLITE_ENABLE_FTS4
     -DSQLITE_ENABLE_FTS5
@@ -44,7 +44,7 @@ jobs:
         clang \
           -fPIC \
           -shared \
-          ${{ env.SQLITE_CFLAGS }} \
+          ${{ env.SQLITE_COMPILE_TIME_OPTIONS }} \
           sqlite/sqlite3.c \
           ${{ env.UNIX_LDFLAGS }} \
           -o build/linux-x86_64/sqlite3.so
@@ -52,7 +52,7 @@ jobs:
     - name: Compile SQLite for Linux x86_64 (executable)
       run: |
         clang \
-          ${{ env.SQLITE_CFLAGS }} \
+          ${{ env.SQLITE_COMPILE_TIME_OPTIONS }} \
           sqlite/sqlite3.c sqlite/shell.c \
           ${{ env.UNIX_LDFLAGS }} \
           -o build/linux-x86_64/sqlite3
@@ -63,7 +63,7 @@ jobs:
         clang --target=aarch64-linux-gnu \
           -fPIC \
           -shared \
-          ${{ env.SQLITE_CFLAGS }} \
+          ${{ env.SQLITE_COMPILE_TIME_OPTIONS }} \
           sqlite/sqlite3.c \
           ${{ env.UNIX_LDFLAGS }} \
           -o build/linux-aarch64/sqlite3.so
@@ -71,7 +71,7 @@ jobs:
     - name: Compile SQLite for Linux ARM64 (executable)
       run: |
         clang --target=aarch64-linux-gnu \
-          ${{ env.SQLITE_CFLAGS }} \
+          ${{ env.SQLITE_COMPILE_TIME_OPTIONS }} \
           sqlite/sqlite3.c sqlite/shell.c \
           ${{ env.UNIX_LDFLAGS }} \
           -o build/linux-aarch64/sqlite3
