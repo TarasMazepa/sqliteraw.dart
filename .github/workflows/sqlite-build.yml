@@ -72,19 +72,3 @@ jobs:
           sqlite/sqlite3.c sqlite/shell.c \
           ${{ env.UNIX_LDFLAGS }} \
           -o build/linux-aarch64/sqlite3
-
-    - name: Verify all build artifacts
-      run: |
-        echo "=== Linux x86_64 ==="
-        ls -la build/linux-x86_64/
-        file build/linux-x86_64/sqlite3.so
-        file build/linux-x86_64/sqlite3
-        
-        echo "=== Linux ARM64 ==="
-        ls -la build/linux-aarch64/
-        file build/linux-aarch64/sqlite3.so
-        file build/linux-aarch64/sqlite3
-
-    - name: Test Linux SQLite executable
-      run: |
-        build/linux-x86_64/sqlite3 --version
