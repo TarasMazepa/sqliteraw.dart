@@ -26,14 +26,17 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Install compilation tools
+    - name: Install cross-compilation toolchains
       run: |
         sudo apt-get update
-        sudo apt-get install -y clang
+        sudo apt-get install -y \
+          clang \
+          gcc-aarch64-linux-gnu
 
-    - name: Create build directory
+    - name: Create build directories
       run: |
         mkdir -p build/linux-x86_64
+        mkdir -p build/linux-aarch64
 
     # Linux x86_64 build
     - name: Compile SQLite for Linux x86_64 (shared library)
@@ -54,12 +57,36 @@ jobs:
           ${{ env.UNIX_LDFLAGS }} \
           -o build/linux-x86_64/sqlite3
 
-    - name: Verify build artifacts
+    # Linux ARM64 build
+    - name: Compile SQLite for Linux ARM64 (shared library)
+      run: |
+        clang --target=aarch64-linux-gnu \
+          -fPIC \
+          -shared \
+          ${{ env.SQLITE_CFLAGS }} \
+          sqlite/sqlite3.c \
+          ${{ env.UNIX_LDFLAGS }} \
+          -o build/linux-aarch64/sqlite3.so
+
+    - name: Compile SQLite for Linux ARM64 (executable)
+      run: |
+        clang --target=aarch64-linux-gnu \
+          ${{ env.SQLITE_CFLAGS }} \
+          sqlite/sqlite3.c sqlite/shell.c \
+          ${{ env.UNIX_LDFLAGS }} \
+          -o build/linux-aarch64/sqlite3
+
+    - name: Verify all build artifacts
       run: |
         echo "=== Linux x86_64 ==="
         ls -la build/linux-x86_64/
         file build/linux-x86_64/sqlite3.so
         file build/linux-x86_64/sqlite3
+        
+        echo "=== Linux ARM64 ==="
+        ls -la build/linux-aarch64/
+        file build/linux-aarch64/sqlite3.so
+        file build/linux-aarch64/sqlite3
 
     - name: Test Linux SQLite executable
       run: |
