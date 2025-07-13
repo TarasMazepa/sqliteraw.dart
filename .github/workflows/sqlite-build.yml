@@ -31,18 +31,12 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y \
           clang \
-          gcc-aarch64-linux-gnu \
-          gcc-mingw-w64-x86-64 \
-          gcc-mingw-w64-aarch64
+          gcc-aarch64-linux-gnu
 
     - name: Create build directories
       run: |
         mkdir -p build/linux-x86_64
         mkdir -p build/linux-aarch64
-        mkdir -p build/windows-x86_64
-        mkdir -p build/windows-aarch64
-        mkdir -p build/macos-x86_64
-        mkdir -p build/macos-aarch64
 
     # Linux x86_64 build
     - name: Compile SQLite for Linux x86_64 (shared library)
@@ -82,76 +76,6 @@ jobs:
           ${{ env.UNIX_LDFLAGS }} \
           -o build/linux-aarch64/sqlite3
 
-    # Windows x86_64 build
-    - name: Compile SQLite for Windows x86_64 (shared library)
-      run: |
-        clang --target=x86_64-w64-mingw32 \
-          -shared \
-          ${{ env.SQLITE_CFLAGS }} \
-          sqlite/sqlite3.c \
-          -o build/windows-x86_64/sqlite3.dll
-
-    - name: Compile SQLite for Windows x86_64 (executable)
-      run: |
-        clang --target=x86_64-w64-mingw32 \
-          ${{ env.SQLITE_CFLAGS }} \
-          sqlite/sqlite3.c sqlite/shell.c \
-          -o build/windows-x86_64/sqlite3.exe
-
-    # Windows ARM64 build
-    - name: Compile SQLite for Windows ARM64 (shared library)
-      run: |
-        clang --target=aarch64-w64-mingw32 \
-          -shared \
-          ${{ env.SQLITE_CFLAGS }} \
-          sqlite/sqlite3.c \
-          -o build/windows-aarch64/sqlite3.dll
-
-    - name: Compile SQLite for Windows ARM64 (executable)
-      run: |
-        clang --target=aarch64-w64-mingw32 \
-          ${{ env.SQLITE_CFLAGS }} \
-          sqlite/sqlite3.c sqlite/shell.c \
-          -o build/windows-aarch64/sqlite3.exe
-
-    # macOS x86_64 build
-    - name: Compile SQLite for macOS x86_64 (shared library)
-      run: |
-        clang --target=x86_64-apple-darwin \
-          -shared \
-          -fPIC \
-          ${{ env.SQLITE_CFLAGS }} \
-          sqlite/sqlite3.c \
-          ${{ env.UNIX_LDFLAGS }} \
-          -o build/macos-x86_64/sqlite3.dylib
-
-    - name: Compile SQLite for macOS x86_64 (executable)
-      run: |
-        clang --target=x86_64-apple-darwin \
-          ${{ env.SQLITE_CFLAGS }} \
-          sqlite/sqlite3.c sqlite/shell.c \
-          ${{ env.UNIX_LDFLAGS }} \
-          -o build/macos-x86_64/sqlite3
-
-    # macOS ARM64 build
-    - name: Compile SQLite for macOS ARM64 (shared library)
-      run: |
-        clang --target=aarch64-apple-darwin \
-          -shared \
-          -fPIC \
-          ${{ env.SQLITE_CFLAGS }} \
-          sqlite/sqlite3.c \
-          ${{ env.UNIX_LDFLAGS }} \
-          -o build/macos-aarch64/sqlite3.dylib
-
-    - name: Compile SQLite for macOS ARM64 (executable)
-      run: |
-        clang --target=aarch64-apple-darwin \
-          ${{ env.SQLITE_CFLAGS }} \
-          sqlite/sqlite3.c sqlite/shell.c \
-          ${{ env.UNIX_LDFLAGS }} \
-          -o build/macos-aarch64/sqlite3
-
     - name: Verify all build artifacts
       run: |
         echo "=== Linux x86_64 ==="
@@ -163,26 +87,6 @@ jobs:
         ls -la build/linux-aarch64/
         file build/linux-aarch64/sqlite3.so
         file build/linux-aarch64/sqlite3
-        
-        echo "=== Windows x86_64 ==="
-        ls -la build/windows-x86_64/
-        file build/windows-x86_64/sqlite3.dll
-        file build/windows-x86_64/sqlite3.exe
-        
-        echo "=== Windows ARM64 ==="
-        ls -la build/windows-aarch64/
-        file build/windows-aarch64/sqlite3.dll
-        file build/windows-aarch64/sqlite3.exe
-        
-        echo "=== macOS x86_64 ==="
-        ls -la build/macos-x86_64/
-        file build/macos-x86_64/sqlite3.dylib
-        file build/macos-x86_64/sqlite3
-        
-        echo "=== macOS ARM64 ==="
-        ls -la build/macos-aarch64/
-        file build/macos-aarch64/sqlite3.dylib
-        file build/macos-aarch64/sqlite3
 
     - name: Test Linux SQLite executable
       run: |
