@@ -29,21 +29,18 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: Install cross-compilation toolchains
-      run: |
+    - run: |
         sudo apt-get update
         sudo apt-get install -y \
           clang \
           gcc-aarch64-linux-gnu
 
-    - name: Create build directories
-      run: |
+    - run: |
         mkdir -p build/linux-x86_64
         mkdir -p build/linux-aarch64
 
     # Linux x86_64 build
-    - name: Compile SQLite for Linux x86_64 (shared library)
-      run: |
+    - run: |
         clang \
           -fPIC \
           -shared \
@@ -52,8 +49,7 @@ jobs:
           ${{ env.UNIX_LDFLAGS }} \
           -o build/linux-x86_64/sqlite3.so
 
-    - name: Compile SQLite for Linux x86_64 (executable)
-      run: |
+    - run: |
         clang \
           ${{ env.SQLITE_COMPILE_TIME_OPTIONS }} \
           sqlite/sqlite3.c sqlite/shell.c \
@@ -61,8 +57,7 @@ jobs:
           -o build/linux-x86_64/sqlite3
 
     # Linux ARM64 build
-    - name: Compile SQLite for Linux ARM64 (shared library)
-      run: |
+    - run: |
         clang --target=aarch64-linux-gnu \
           -fPIC \
           -shared \
@@ -71,8 +66,7 @@ jobs:
           ${{ env.UNIX_LDFLAGS }} \
           -o build/linux-aarch64/sqlite3.so
 
-    - name: Compile SQLite for Linux ARM64 (executable)
-      run: |
+    - run: |
         clang --target=aarch64-linux-gnu \
           ${{ env.SQLITE_COMPILE_TIME_OPTIONS }} \
           sqlite/sqlite3.c sqlite/shell.c \
