@@ -17,7 +17,10 @@ env:
     -DSQLITE_ENABLE_GEOPOLY
   
   # Unix/Linux linking flags
-  UNIX_LDFLAGS: "-lpthread -ldl -lm"
+  UNIX_LDFLAGS: >-
+    -lpthread
+    -ldl
+    -lm
 
 jobs:
   sqlite-build:
