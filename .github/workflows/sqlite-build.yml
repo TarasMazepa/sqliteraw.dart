@@ -1,0 +1,74 @@
+name: sqlite-build.yml
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+env:
+  # Common SQLite compile-time options based on official documentation
+  SQLITE_COMPILE_TIME_OPTIONS: >-
+    -O3
+    -DSQLITE_ENABLE_FTS4
+    -DSQLITE_ENABLE_FTS5
+    -DSQLITE_ENABLE_RTREE
+    -DSQLITE_ENABLE_GEOPOLY
+  
+  # Unix/Linux linking flags
+  UNIX_LDFLAGS: >-
+    -lpthread
+    -ldl
+    -lm
+
+jobs:
+  sqlite-build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - run: |
+        sudo apt-get update
+        sudo apt-get install -y \
+          clang \
+          gcc-aarch64-linux-gnu
+
+    - run: |
+        mkdir -p build/linux-x86_64
+        mkdir -p build/linux-aarch64
+
+    # Linux x86_64 build
+    - run: |
+        clang \
+          -fPIC \
+          -shared \
+          ${{ env.SQLITE_COMPILE_TIME_OPTIONS }} \
+          sqlite/sqlite3.c \
+          ${{ env.UNIX_LDFLAGS }} \
+          -o build/linux-x86_64/sqlite3.so
+
+    - run: |
+        clang \
+          ${{ env.SQLITE_COMPILE_TIME_OPTIONS }} \
+          sqlite/sqlite3.c sqlite/shell.c \
+          ${{ env.UNIX_LDFLAGS }} \
+          -o build/linux-x86_64/sqlite3
+
+    # Linux ARM64 build
+    - run: |
+        clang --target=aarch64-linux-gnu \
+          -fPIC \
+          -shared \
+          ${{ env.SQLITE_COMPILE_TIME_OPTIONS }} \
+          sqlite/sqlite3.c \
+          ${{ env.UNIX_LDFLAGS }} \
+          -o build/linux-aarch64/sqlite3.so
+
+    - run: |
+        clang --target=aarch64-linux-gnu \
+          ${{ env.SQLITE_COMPILE_TIME_OPTIONS }} \
+          sqlite/sqlite3.c sqlite/shell.c \
+          ${{ env.UNIX_LDFLAGS }} \
+          -o build/linux-aarch64/sqlite3
