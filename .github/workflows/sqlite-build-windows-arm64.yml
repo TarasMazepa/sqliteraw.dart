@@ -1,0 +1,50 @@
+name: sqlite-build-windows-arm64
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+env:
+  SQLITE_COMPILE_TIME_OPTIONS: >-
+    -O3
+    -DSQLITE_ENABLE_FTS4
+    -DSQLITE_ENABLE_FTS5
+    -DSQLITE_ENABLE_RTREE
+    -DSQLITE_ENABLE_GEOPOLY
+
+jobs:
+  sqlite-build:
+    runs-on: windows-11-arm
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - run: clang --version
+
+    - run: mkdir -p "build/windows-aarch64"
+      shell: bash
+
+    - run: |
+        # Build shared library
+        clang -shared \
+          -DSQLITE_API=__declspec\(dllexport\) \
+          ${{ env.SQLITE_COMPILE_TIME_OPTIONS }} \
+          sqlite/sqlite3.c \
+          -o "build/windows-aarch64/sqlite3.dll"
+        
+        # Build command-line tool
+        clang \
+          ${{ env.SQLITE_COMPILE_TIME_OPTIONS }} \
+          sqlite/sqlite3.c sqlite/shell.c \
+          -o "build/windows-aarch64/sqlite3.exe"
+      shell: bash
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: sqlite-windows-arm64-builds
+        path: build/
+        retention-days: 7
