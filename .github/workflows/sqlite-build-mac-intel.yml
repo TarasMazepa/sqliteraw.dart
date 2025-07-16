@@ -22,8 +22,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - run: clang --version
-
     - run: mkdir -p "build/macos-x86_64"
 
     - run: |

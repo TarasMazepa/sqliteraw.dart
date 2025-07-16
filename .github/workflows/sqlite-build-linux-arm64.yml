@@ -43,5 +43,3 @@ jobs:
           sqlite/sqlite3.c sqlite/shell.c \
           -lpthread -ldl -lm \
           -o "build/linux-aarch64/sqlite3"
-        
-        echo "Completed Linux ARM64"
