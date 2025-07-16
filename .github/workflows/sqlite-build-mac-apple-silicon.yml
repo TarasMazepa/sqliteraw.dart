@@ -40,10 +40,3 @@ jobs:
           sqlite/sqlite3.c sqlite/shell.c \
           -lm -lpthread \
           -o "build/macos-aarch64/sqlite3"
-
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: sqlite-macos-apple-silicon-builds
-        path: build/
-        retention-days: 7

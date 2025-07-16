@@ -41,10 +41,3 @@ jobs:
           sqlite/sqlite3.c sqlite/shell.c \
           -o "build/windows-aarch64/sqlite3.exe"
       shell: bash
-
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: sqlite-windows-arm64-builds
-        path: build/
-        retention-days: 7

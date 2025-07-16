@@ -42,10 +42,3 @@ jobs:
           sqlite/sqlite3.c sqlite/shell.c \
           -lpthread -ldl -lm \
           -o "build/linux-x86_64/sqlite3"
-
-    - name: Upload build artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: sqlite-linux-x86_64-builds
-        path: build/
-        retention-days: 7
