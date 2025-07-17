@@ -8,67 +8,144 @@ on:
   workflow_dispatch:
 
 env:
-  # Common SQLite compile-time options based on official documentation
   SQLITE_COMPILE_TIME_OPTIONS: >-
     -O3
     -DSQLITE_ENABLE_FTS4
     -DSQLITE_ENABLE_FTS5
     -DSQLITE_ENABLE_RTREE
     -DSQLITE_ENABLE_GEOPOLY
-  
-  # Unix/Linux linking flags
-  UNIX_LDFLAGS: >-
-    -lpthread
-    -ldl
-    -lm
 
 jobs:
-  sqlite-build:
+  sqlite-build-ubuntu-24-04-arm:
+    runs-on: ubuntu-24.04-arm
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: |
+          sudo apt-get update
+          sudo apt-get install -y clang
+
+      - run: |
+          clang -fPIC -shared \
+            ${{ env.SQLITE_COMPILE_TIME_OPTIONS }} \
+            sqlite/sqlite3.c \
+            -lpthread -ldl -lm \
+            -o "sqlite3.so"
+          
+          clang \
+            ${{ env.SQLITE_COMPILE_TIME_OPTIONS }} \
+            sqlite/sqlite3.c sqlite/shell.c \
+            -lpthread -ldl -lm \
+            -o "sqlite3"
+          
+          ./sqlite3 --version
+
+  sqlite-build-ubuntu-latest:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - run: |
-        sudo apt-get update
-        sudo apt-get install -y \
+      - run: |
+          sudo apt-get update
+          sudo apt-get install -y clang
+
+      - run: |
+          clang -fPIC -shared \
+            ${{ env.SQLITE_COMPILE_TIME_OPTIONS }} \
+            sqlite/sqlite3.c \
+            -lpthread -ldl -lm \
+            -o "sqlite3.so"
+          
           clang \
-          gcc-aarch64-linux-gnu
+            ${{ env.SQLITE_COMPILE_TIME_OPTIONS }} \
+            sqlite/sqlite3.c sqlite/shell.c \
+            -lpthread -ldl -lm \
+            -o "sqlite3"
+          
+          ./sqlite3 --version
 
-    - run: |
-        mkdir -p build/linux-x86_64
-        mkdir -p build/linux-aarch64
+  sqlite-build-macos-latest:
+    runs-on: macos-latest
 
-    # Linux x86_64 build
-    - run: |
-        clang \
-          -fPIC \
-          -shared \
-          ${{ env.SQLITE_COMPILE_TIME_OPTIONS }} \
-          sqlite/sqlite3.c \
-          ${{ env.UNIX_LDFLAGS }} \
-          -o build/linux-x86_64/sqlite3.so
+    steps:
+      - uses: actions/checkout@v4
 
-    - run: |
-        clang \
-          ${{ env.SQLITE_COMPILE_TIME_OPTIONS }} \
-          sqlite/sqlite3.c sqlite/shell.c \
-          ${{ env.UNIX_LDFLAGS }} \
-          -o build/linux-x86_64/sqlite3
+      - run: |
+          clang -dynamiclib \
+            ${{ env.SQLITE_COMPILE_TIME_OPTIONS }} \
+            sqlite/sqlite3.c \
+            -lm -lpthread \
+            -o "sqlite3.dylib"
+          
+          clang \
+            ${{ env.SQLITE_COMPILE_TIME_OPTIONS }} \
+            sqlite/sqlite3.c sqlite/shell.c \
+            -lm -lpthread \
+            -o "sqlite3"
+          
+          ./sqlite3 --version
 
-    # Linux ARM64 build
-    - run: |
-        clang --target=aarch64-linux-gnu \
-          -fPIC \
-          -shared \
-          ${{ env.SQLITE_COMPILE_TIME_OPTIONS }} \
-          sqlite/sqlite3.c \
-          ${{ env.UNIX_LDFLAGS }} \
-          -o build/linux-aarch64/sqlite3.so
+  sqlite-build-macos-13:
+    runs-on: macos-13
 
-    - run: |
-        clang --target=aarch64-linux-gnu \
-          ${{ env.SQLITE_COMPILE_TIME_OPTIONS }} \
-          sqlite/sqlite3.c sqlite/shell.c \
-          ${{ env.UNIX_LDFLAGS }} \
-          -o build/linux-aarch64/sqlite3
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: |
+          clang -dynamiclib \
+            ${{ env.SQLITE_COMPILE_TIME_OPTIONS }} \
+            sqlite/sqlite3.c \
+            -lm -lpthread \
+            -o "sqlite3.dylib"
+          
+          clang \
+            ${{ env.SQLITE_COMPILE_TIME_OPTIONS }} \
+            sqlite/sqlite3.c sqlite/shell.c \
+            -lm -lpthread \
+            -o "sqlite3"
+          
+          ./sqlite3 --version
+
+  sqlite-build-windows-11-arm:
+    runs-on: windows-11-arm
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: |
+          clang -shared \
+            -DSQLITE_API=__declspec\(dllexport\) \
+            ${{ env.SQLITE_COMPILE_TIME_OPTIONS }} \
+            sqlite/sqlite3.c \
+            -o "sqlite3.dll"
+          
+          clang \
+            ${{ env.SQLITE_COMPILE_TIME_OPTIONS }} \
+            sqlite/sqlite3.c sqlite/shell.c \
+            -o "sqlite3.exe"
+          
+          ./sqlite3 --version
+        shell: bash
+
+  sqlite-build-windows-latest:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: |
+          clang -shared \
+            -DSQLITE_API=__declspec\(dllexport\) \
+            ${{ env.SQLITE_COMPILE_TIME_OPTIONS }} \
+            sqlite/sqlite3.c \
+            -o "sqlite3.dll"
+          
+          clang \
+            ${{ env.SQLITE_COMPILE_TIME_OPTIONS }} \
+            sqlite/sqlite3.c sqlite/shell.c \
+            -o "sqlite3.exe"
+          
+          ./sqlite3 --version
+        shell: bash
