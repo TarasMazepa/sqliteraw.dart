@@ -82,7 +82,7 @@ packages:
     source: hosted
     version: "3.0.6"
   ffi:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: ffi
       sha256: "289279317b4b16eb2bb7e271abccd4bf84ec9bdcbe999e278a94b804f5630418"
@@ -287,7 +287,7 @@ packages:
       path: "../../sqliteraw"
       relative: true
     source: path
-    version: "0.0.1-3500200"
+    version: "0.0.1-3500300"
   stack_trace:
     dependency: transitive
     description:
