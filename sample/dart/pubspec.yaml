@@ -4,6 +4,7 @@ environment:
   sdk: ^3.8.1
 
 dependencies:
+  ffi: ^2.1.4
   sqliteraw.dart:
     path: '../../sqliteraw'
 
