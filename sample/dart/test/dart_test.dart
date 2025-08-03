@@ -21,5 +21,13 @@ void main() {
       final runtimeVersion = dart.versionFromLibrary();
       expect(compileTimeVersion, equals(runtimeVersion));
     });
+
+    test('versionFromSqlQuery() returns version via SQL SELECT statement', () {
+      final version = dart.versionFromSqlQuery();
+      expect(version, isNotEmpty);
+      expect(version, matches(RegExp(r'^\d+\.\d+\.\d+')));
+      // Should match the other version functions
+      expect(version, equals(dart.version()));
+    });
   });
 }
