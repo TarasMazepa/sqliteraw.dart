@@ -41,6 +41,17 @@ jobs:
           
           ./sqlite3 --version
 
+      - uses: dart-lang/setup-dart@v1
+
+      - run: |
+          mkdir -p sample/dart/assets
+          cp sqlite3.so sample/dart/assets/libsqlite3.so
+
+      - run: |
+          cd sample/dart
+          dart pub get
+          dart test
+
   sqlite-build-ubuntu-latest:
     runs-on: ubuntu-latest
 
@@ -66,6 +77,17 @@ jobs:
           
           ./sqlite3 --version
 
+      - uses: dart-lang/setup-dart@v1
+
+      - run: |
+          mkdir -p sample/dart/assets
+          cp sqlite3.so sample/dart/assets/libsqlite3.so
+
+      - run: |
+          cd sample/dart
+          dart pub get
+          dart test
+
   sqlite-build-macos-latest:
     runs-on: macos-latest
 
@@ -86,6 +108,17 @@ jobs:
             -o "sqlite3"
           
           ./sqlite3 --version
+
+      - uses: dart-lang/setup-dart@v1
+
+      - run: |
+          mkdir -p sample/dart/assets
+          cp sqlite3.dylib sample/dart/assets/libsqlite3.dylib
+
+      - run: |
+          cd sample/dart
+          dart pub get
+          dart test
 
   sqlite-build-macos-13:
     runs-on: macos-13
@@ -108,6 +141,17 @@ jobs:
           
           ./sqlite3 --version
 
+      - uses: dart-lang/setup-dart@v1
+
+      - run: |
+          mkdir -p sample/dart/assets
+          cp sqlite3.dylib sample/dart/assets/libsqlite3.dylib
+
+      - run: |
+          cd sample/dart
+          dart pub get
+          dart test
+
   sqlite-build-windows-11-arm:
     runs-on: windows-11-arm
 
@@ -129,6 +173,19 @@ jobs:
           ./sqlite3 --version
         shell: bash
 
+      - uses: dart-lang/setup-dart@v1
+
+      - run: |
+          mkdir -p sample/dart/assets
+          cp sqlite3.dll sample/dart/assets/sqlite3.dll
+        shell: bash
+
+      - run: |
+          cd sample/dart
+          dart pub get
+          dart test
+        shell: bash
+
   sqlite-build-windows-latest:
     runs-on: windows-latest
 
@@ -148,4 +205,17 @@ jobs:
             -o "sqlite3.exe"
           
           ./sqlite3 --version
+        shell: bash
+
+      - uses: dart-lang/setup-dart@v1
+
+      - run: |
+          mkdir -p sample/dart/assets
+          cp sqlite3.dll sample/dart/assets/sqlite3.dll
+        shell: bash
+
+      - run: |
+          cd sample/dart
+          dart pub get
+          dart test
         shell: bash
