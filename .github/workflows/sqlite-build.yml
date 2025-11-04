@@ -87,27 +87,6 @@ jobs:
           
           ./sqlite3 --version
 
-  sqlite-build-macos-13:
-    runs-on: macos-13
-
-    steps:
-      - uses: actions/checkout@v4
-
-      - run: |
-          clang -dynamiclib \
-            ${{ env.SQLITE_COMPILE_TIME_OPTIONS }} \
-            sqlite/sqlite3.c \
-            -lm -lpthread \
-            -o "sqlite3.dylib"
-          
-          clang \
-            ${{ env.SQLITE_COMPILE_TIME_OPTIONS }} \
-            sqlite/sqlite3.c sqlite/shell.c \
-            -lm -lpthread \
-            -o "sqlite3"
-          
-          ./sqlite3 --version
-
   sqlite-build-windows-11-arm:
     runs-on: windows-11-arm
 
