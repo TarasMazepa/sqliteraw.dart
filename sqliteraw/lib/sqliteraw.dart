@@ -1226,6 +1226,25 @@ class NativeLibrary {
   late final _sqlite3_error_offset =
       _sqlite3_error_offsetPtr.asFunction<int Function(ffi.Pointer<sqlite3>)>();
 
+  int sqlite3_set_errmsg(
+    ffi.Pointer<sqlite3> db,
+    int errcode,
+    ffi.Pointer<ffi.Char> zErrMsg,
+  ) {
+    return _sqlite3_set_errmsg(
+      db,
+      errcode,
+      zErrMsg,
+    );
+  }
+
+  late final _sqlite3_set_errmsgPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int Function(ffi.Pointer<sqlite3>, ffi.Int,
+              ffi.Pointer<ffi.Char>)>>('sqlite3_set_errmsg');
+  late final _sqlite3_set_errmsg = _sqlite3_set_errmsgPtr.asFunction<
+      int Function(ffi.Pointer<sqlite3>, int, ffi.Pointer<ffi.Char>)>();
+
   int sqlite3_limit(
     ffi.Pointer<sqlite3> arg0,
     int id,
@@ -5272,6 +5291,34 @@ class NativeLibrary {
       int Function(ffi.Pointer<sqlite3>, int, ffi.Pointer<ffi.Int>,
           ffi.Pointer<ffi.Int>, int)>();
 
+  int sqlite3_db_status64(
+    ffi.Pointer<sqlite3> arg0,
+    int arg1,
+    ffi.Pointer<sqlite3_int64> arg2,
+    ffi.Pointer<sqlite3_int64> arg3,
+    int arg4,
+  ) {
+    return _sqlite3_db_status64(
+      arg0,
+      arg1,
+      arg2,
+      arg3,
+      arg4,
+    );
+  }
+
+  late final _sqlite3_db_status64Ptr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int Function(
+              ffi.Pointer<sqlite3>,
+              ffi.Int,
+              ffi.Pointer<sqlite3_int64>,
+              ffi.Pointer<sqlite3_int64>,
+              ffi.Int)>>('sqlite3_db_status64');
+  late final _sqlite3_db_status64 = _sqlite3_db_status64Ptr.asFunction<
+      int Function(ffi.Pointer<sqlite3>, int, ffi.Pointer<sqlite3_int64>,
+          ffi.Pointer<sqlite3_int64>, int)>();
+
   int sqlite3_stmt_status(
     ffi.Pointer<sqlite3_stmt> arg0,
     int op,
@@ -5988,6 +6035,47 @@ class NativeLibrary {
   late final _sqlite3_deserialize = _sqlite3_deserializePtr.asFunction<
       int Function(ffi.Pointer<sqlite3>, ffi.Pointer<ffi.Char>,
           ffi.Pointer<ffi.UnsignedChar>, int, int, int)>();
+
+  int sqlite3_carray_bind(
+    ffi.Pointer<sqlite3_stmt> pStmt,
+    int i,
+    ffi.Pointer<ffi.Void> aData,
+    int nData,
+    int mFlags,
+    ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>
+        xDel,
+  ) {
+    return _sqlite3_carray_bind(
+      pStmt,
+      i,
+      aData,
+      nData,
+      mFlags,
+      xDel,
+    );
+  }
+
+  late final _sqlite3_carray_bindPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int Function(
+              ffi.Pointer<sqlite3_stmt>,
+              ffi.Int,
+              ffi.Pointer<ffi.Void>,
+              ffi.Int,
+              ffi.Int,
+              ffi.Pointer<
+                  ffi.NativeFunction<
+                      ffi.Void Function(
+                          ffi.Pointer<ffi.Void>)>>)>>('sqlite3_carray_bind');
+  late final _sqlite3_carray_bind = _sqlite3_carray_bindPtr.asFunction<
+      int Function(
+          ffi.Pointer<sqlite3_stmt>,
+          int,
+          ffi.Pointer<ffi.Void>,
+          int,
+          int,
+          ffi.Pointer<
+              ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>)>();
 
   int sqlite3_rtree_geometry_callback(
     ffi.Pointer<sqlite3> db,
@@ -7071,12 +7159,18 @@ final class fts5_api extends ffi.Struct {
       xFindTokenizer_v2;
 }
 
-const String SQLITE_VERSION = '3.50.4';
+const String SQLITE_VERSION = '3.51.0';
 
-const int SQLITE_VERSION_NUMBER = 3050004;
+const int SQLITE_VERSION_NUMBER = 3051000;
 
 const String SQLITE_SOURCE_ID =
-    '2025-07-30 19:33:53 4d8adfb30e03f9cf27f800a2c1ba3c48fb4ca1b08b0f5ed59a4d5ecbf45e20a3';
+    '2025-11-04 19:38:17 fb2c931ae597f8d00a37574ff67aeed3eced4e5547f9120744ae4bfa8e74527b';
+
+const String SQLITE_SCM_BRANCH = 'trunk';
+
+const String SQLITE_SCM_TAGS = 'release major-release version-3.51.0';
+
+const String SQLITE_SCM_DATETIME = '2025-11-04T19:38:17.314Z';
 
 const int SQLITE_OK = 0;
 
@@ -7146,6 +7240,12 @@ const int SQLITE_ERROR_RETRY = 513;
 
 const int SQLITE_ERROR_SNAPSHOT = 769;
 
+const int SQLITE_ERROR_RESERVESIZE = 1025;
+
+const int SQLITE_ERROR_KEY = 1281;
+
+const int SQLITE_ERROR_UNABLE = 1537;
+
 const int SQLITE_IOERR_READ = 266;
 
 const int SQLITE_IOERR_SHORT_READ = 522;
@@ -7213,6 +7313,10 @@ const int SQLITE_IOERR_DATA = 8202;
 const int SQLITE_IOERR_CORRUPTFS = 8458;
 
 const int SQLITE_IOERR_IN_PAGE = 8714;
+
+const int SQLITE_IOERR_BADKEY = 8970;
+
+const int SQLITE_IOERR_CODEC = 9226;
 
 const int SQLITE_LOCKED_SHAREDCACHE = 262;
 
@@ -7473,6 +7577,8 @@ const int SQLITE_FCNTL_RESET_CACHE = 42;
 const int SQLITE_FCNTL_NULL_IO = 43;
 
 const int SQLITE_FCNTL_BLOCK_ON_CONNECT = 44;
+
+const int SQLITE_FCNTL_FILESTAT = 45;
 
 const int SQLITE_GET_LOCKPROXYFILE = 2;
 
@@ -7954,7 +8060,9 @@ const int SQLITE_DBSTATUS_CACHE_USED_SHARED = 11;
 
 const int SQLITE_DBSTATUS_CACHE_SPILL = 12;
 
-const int SQLITE_DBSTATUS_MAX = 12;
+const int SQLITE_DBSTATUS_TEMPBUF_SPILL = 13;
+
+const int SQLITE_DBSTATUS_MAX = 13;
 
 const int SQLITE_STMTSTATUS_FULLSCAN_STEP = 1;
 
@@ -7973,6 +8081,8 @@ const int SQLITE_STMTSTATUS_FILTER_MISS = 7;
 const int SQLITE_STMTSTATUS_FILTER_HIT = 8;
 
 const int SQLITE_STMTSTATUS_MEMUSED = 99;
+
+const int SQLITE_CHECKPOINT_NOOP = -1;
 
 const int SQLITE_CHECKPOINT_PASSIVE = 0;
 
@@ -8021,6 +8131,26 @@ const int SQLITE_DESERIALIZE_FREEONCLOSE = 1;
 const int SQLITE_DESERIALIZE_RESIZEABLE = 2;
 
 const int SQLITE_DESERIALIZE_READONLY = 4;
+
+const int SQLITE_CARRAY_INT32 = 0;
+
+const int SQLITE_CARRAY_INT64 = 1;
+
+const int SQLITE_CARRAY_DOUBLE = 2;
+
+const int SQLITE_CARRAY_TEXT = 3;
+
+const int SQLITE_CARRAY_BLOB = 4;
+
+const int CARRAY_INT32 = 0;
+
+const int CARRAY_INT64 = 1;
+
+const int CARRAY_DOUBLE = 2;
+
+const int CARRAY_TEXT = 3;
+
+const int CARRAY_BLOB = 4;
 
 const int NOT_WITHIN = 0;
 
