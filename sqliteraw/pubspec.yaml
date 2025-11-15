@@ -1,6 +1,6 @@
 name: sqliteraw.dart
 description: SQLite raw Dart ffi, no alterations, so that you can use the full SQLite C API
-version: 0.0.1-3500400
+version: 0.0.1-3510000
 repository: https://github.com/TarasMazepa/sqliteraw.dart
 
 environment:
