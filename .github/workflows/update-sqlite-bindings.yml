@@ -34,9 +34,12 @@ jobs:
           ls
           git add --intent-to-add .
 
+      - id: get-dart-version
+        run: echo "dart_sdk_version=$(cat DART_SDK_VERSION)" >> $GITHUB_OUTPUT
+
       - uses: dart-lang/setup-dart@v1
         with:
-          sdk: '3.7.1'
+          sdk: ${{ steps.get-dart-version.outputs.dart_sdk_version }}
 
       - run: dart run ffigen
         working-directory: sqliteraw
