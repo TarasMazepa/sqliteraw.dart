@@ -3505,16 +3505,16 @@ class NativeLibrary {
 
   void sqlite3_result_text64(
     ffi.Pointer<sqlite3_context> arg0,
-    ffi.Pointer<ffi.Char> z,
-    int n,
+    ffi.Pointer<ffi.Char> arg1,
+    int arg2,
     ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>
         arg3,
     int encoding,
   ) {
     return _sqlite3_result_text64(
       arg0,
-      z,
-      n,
+      arg1,
+      arg2,
       arg3,
       encoding,
     );
@@ -5075,20 +5075,6 @@ class NativeLibrary {
   late final _sqlite3_str_finish = _sqlite3_str_finishPtr
       .asFunction<ffi.Pointer<ffi.Char> Function(ffi.Pointer<sqlite3_str>)>();
 
-  void sqlite3_str_free(
-    ffi.Pointer<sqlite3_str> arg0,
-  ) {
-    return _sqlite3_str_free(
-      arg0,
-    );
-  }
-
-  late final _sqlite3_str_freePtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<sqlite3_str>)>>(
-          'sqlite3_str_free');
-  late final _sqlite3_str_free = _sqlite3_str_freePtr
-      .asFunction<void Function(ffi.Pointer<sqlite3_str>)>();
-
   void sqlite3_str_appendf(
     ffi.Pointer<sqlite3_str> arg0,
     ffi.Pointer<ffi.Char> zFormat,
@@ -5194,23 +5180,6 @@ class NativeLibrary {
           'sqlite3_str_reset');
   late final _sqlite3_str_reset = _sqlite3_str_resetPtr
       .asFunction<void Function(ffi.Pointer<sqlite3_str>)>();
-
-  void sqlite3_str_truncate(
-    ffi.Pointer<sqlite3_str> arg0,
-    int N,
-  ) {
-    return _sqlite3_str_truncate(
-      arg0,
-      N,
-    );
-  }
-
-  late final _sqlite3_str_truncatePtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Void Function(
-              ffi.Pointer<sqlite3_str>, ffi.Int)>>('sqlite3_str_truncate');
-  late final _sqlite3_str_truncate = _sqlite3_str_truncatePtr
-      .asFunction<void Function(ffi.Pointer<sqlite3_str>, int)>();
 
   int sqlite3_str_errcode(
     ffi.Pointer<sqlite3_str> arg0,
@@ -6066,49 +6035,6 @@ class NativeLibrary {
   late final _sqlite3_deserialize = _sqlite3_deserializePtr.asFunction<
       int Function(ffi.Pointer<sqlite3>, ffi.Pointer<ffi.Char>,
           ffi.Pointer<ffi.UnsignedChar>, int, int, int)>();
-
-  int sqlite3_carray_bind_v2(
-    ffi.Pointer<sqlite3_stmt> pStmt,
-    int i,
-    ffi.Pointer<ffi.Void> aData,
-    int nData,
-    int mFlags,
-    ffi.Pointer<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>
-        xDel,
-    ffi.Pointer<ffi.Void> pDel,
-  ) {
-    return _sqlite3_carray_bind_v2(
-      pStmt,
-      i,
-      aData,
-      nData,
-      mFlags,
-      xDel,
-      pDel,
-    );
-  }
-
-  late final _sqlite3_carray_bind_v2Ptr = _lookup<
-      ffi.NativeFunction<
-          ffi.Int Function(
-              ffi.Pointer<sqlite3_stmt>,
-              ffi.Int,
-              ffi.Pointer<ffi.Void>,
-              ffi.Int,
-              ffi.Int,
-              ffi.Pointer<
-                  ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>,
-              ffi.Pointer<ffi.Void>)>>('sqlite3_carray_bind_v2');
-  late final _sqlite3_carray_bind_v2 = _sqlite3_carray_bind_v2Ptr.asFunction<
-      int Function(
-          ffi.Pointer<sqlite3_stmt>,
-          int,
-          ffi.Pointer<ffi.Void>,
-          int,
-          int,
-          ffi.Pointer<
-              ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>,
-          ffi.Pointer<ffi.Void>)>();
 
   int sqlite3_carray_bind(
     ffi.Pointer<sqlite3_stmt> pStmt,
@@ -7233,18 +7159,18 @@ final class fts5_api extends ffi.Struct {
       xFindTokenizer_v2;
 }
 
-const String SQLITE_VERSION = '3.52.0';
+const String SQLITE_VERSION = '3.51.3';
 
-const int SQLITE_VERSION_NUMBER = 3052000;
+const int SQLITE_VERSION_NUMBER = 3051003;
 
 const String SQLITE_SOURCE_ID =
-    '2026-03-06 16:01:44 557aeb43869d3585137b17690cb3b64f7de6921774daae9e56403c3717dceab6';
+    '2026-03-13 10:38:09 737ae4a34738ffa0c3ff7f9bb18df914dd1cad163f28fd6b6e114a344fe6d618';
 
-const String SQLITE_SCM_BRANCH = 'trunk';
+const String SQLITE_SCM_BRANCH = 'branch-3.51';
 
-const String SQLITE_SCM_TAGS = 'release major-release version-3.52.0';
+const String SQLITE_SCM_TAGS = 'release version-3.51.3';
 
-const String SQLITE_SCM_DATETIME = '2026-03-06T16:01:44.367Z';
+const String SQLITE_SCM_DATETIME = '2026-03-13T10:38:09.694Z';
 
 const int SQLITE_OK = 0;
 
@@ -7780,9 +7706,7 @@ const int SQLITE_DBCONFIG_ENABLE_ATTACH_WRITE = 1021;
 
 const int SQLITE_DBCONFIG_ENABLE_COMMENTS = 1022;
 
-const int SQLITE_DBCONFIG_FP_DIGITS = 1023;
-
-const int SQLITE_DBCONFIG_MAX = 1023;
+const int SQLITE_DBCONFIG_MAX = 1022;
 
 const int SQLITE_SETLK_BLOCK_ON_CONNECT = 1;
 
@@ -7890,8 +7814,6 @@ const int SQLITE_LIMIT_TRIGGER_DEPTH = 10;
 
 const int SQLITE_LIMIT_WORKER_THREADS = 11;
 
-const int SQLITE_LIMIT_PARSER_DEPTH = 12;
-
 const int SQLITE_PREPARE_PERSISTENT = 1;
 
 const int SQLITE_PREPARE_NORMALIZE = 2;
@@ -7899,8 +7821,6 @@ const int SQLITE_PREPARE_NORMALIZE = 2;
 const int SQLITE_PREPARE_NO_VTAB = 4;
 
 const int SQLITE_PREPARE_DONT_LOG = 16;
-
-const int SQLITE_PREPARE_FROM_DDL = 32;
 
 const int SQLITE_INTEGER = 1;
 
@@ -7925,8 +7845,6 @@ const int SQLITE_UTF16 = 4;
 const int SQLITE_ANY = 5;
 
 const int SQLITE_UTF16_ALIGNED = 8;
-
-const int SQLITE_UTF8_ZT = 16;
 
 const int SQLITE_DETERMINISTIC = 2048;
 
