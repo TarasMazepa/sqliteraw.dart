@@ -128,3 +128,42 @@ jobs:
           
           ./sqlite3 --version
         shell: bash
+
+  sqlite-build-wasm:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: |
+          sudo apt-get update
+          sudo apt-get install -y curl
+
+      - name: Cache WASI SDK
+        uses: actions/cache@v4
+        id: cache-wasi-sdk
+        with:
+          path: /opt/wasi-sdk
+          key: wasi-sdk-25.0-x86_64-linux
+
+      - name: Install WASI SDK
+        if: steps.cache-wasi-sdk.outputs.cache-hit != 'true'
+        run: |
+          curl -L https://github.com/WebAssembly/wasi-sdk/releases/download/wasi-sdk-25/wasi-sdk-25.0-x86_64-linux.tar.gz \
+            -o wasi-sdk.tar.gz
+          tar -xzf wasi-sdk.tar.gz
+          sudo mv wasi-sdk-25.0-x86_64-linux /opt/wasi-sdk
+
+      - run: |
+          /opt/wasi-sdk/bin/clang \
+            --target=wasm32-wasi \
+            -DSQLITE_OS_KV=1 \
+            -DSQLITE_THREADSAFE=0 \
+            -DSQLITE_DISABLE_LFS \
+            ${{ env.SQLITE_COMPILE_TIME_OPTIONS }} \
+            sqlite/sqlite3.c \
+            -o "sqlite3.wasm"
+          
+          # Verify WASM file was created and get size info
+          ls -la sqlite3.wasm
+          file sqlite3.wasm
