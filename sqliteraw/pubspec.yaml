@@ -13,14 +13,13 @@ dev_dependencies:
   ffigen: ^17.0.0
   hooks: ^1.0.3
   lints: ^5.0.0
-  native_assets_cli: ^0.18.0
   native_toolchain_c: ^0.18.0
   test: ^1.24.0
 
 ffigen:
   output: 'lib/sqliteraw.dart'
   ffi-native:
-    asset-id: 'sqliteraw.dart'
+    assetId: 'sqliteraw.dart'
   headers:
     entry-points:
       - '../sqlite/sqlite3.h'
