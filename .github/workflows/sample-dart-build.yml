@@ -1,0 +1,26 @@
+name: sample-dart-build.yml
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  sample-dart-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dart-lang/setup-dart@v1
+
+      - run: dart pub get
+        working-directory: sqliteraw
+
+      - run: dart run ffigen
+        working-directory: sqliteraw
+
+      - run: dart pub get
+        working-directory: sample/dart
+
+      - run: dart test
+        working-directory: sample/dart
