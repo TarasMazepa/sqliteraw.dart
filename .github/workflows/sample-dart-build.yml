@@ -2,9 +2,9 @@ name: sample-dart-build.yml
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "main" ]
   pull_request:
-    branches: [ "master" ]
+    branches: [ "main" ]
 
 jobs:
   sample-dart-build:
