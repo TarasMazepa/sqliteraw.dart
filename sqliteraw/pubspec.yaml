@@ -4,10 +4,14 @@ version: 0.0.1-3530200
 repository: https://github.com/TarasMazepa/sqliteraw.dart
 
 environment:
-  sdk: ^3.7.1
+  sdk: ^3.10.0
 
 dependencies:
+  code_assets: ^1.2.1
   ffi: ^2.1.4
+  hooks: ^2.0.2
+  logging: ^1.3.0
+  native_toolchain_c: ^0.19.1
 
 dev_dependencies:
   ffigen: ^17.0.0
@@ -16,6 +20,8 @@ dev_dependencies:
 
 ffigen:
   output: 'lib/sqliteraw.dart'
+  ffi-native:
+    asset-id: 'package:sqliteraw.dart/sqliteraw.dart'
   headers:
     entry-points:
       - '../sqlite/sqlite3.h'
