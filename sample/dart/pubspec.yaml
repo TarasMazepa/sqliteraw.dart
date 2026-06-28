@@ -1,4 +1,4 @@
-name: dart
+name: sqliteraw_sample_dart
 
 environment:
   sdk: ^3.10.0
