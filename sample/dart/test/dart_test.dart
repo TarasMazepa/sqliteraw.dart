@@ -4,11 +4,9 @@ import 'package:test/test.dart';
 
 void main() {
   test('sqlite3_libversion', () {
-    final versionStr = sqliteraw
-        .sqlite3_libversion()
-        .cast<Utf8>()
-        .toDartString();
-    expect(versionStr, isNotEmpty);
-    expect(versionStr, sqliteraw.SQLITE_VERSION);
+    expect(
+      sqliteraw.sqlite3_libversion().cast<Utf8>().toDartString(),
+      sqliteraw.SQLITE_VERSION,
+    );
   });
 }
