@@ -1,0 +1,141 @@
+name: sample-dart-test.yml
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  sample-dart-test-ubuntu-24-04-arm:
+    runs-on: ubuntu-24.04-arm
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: get-dart-version
+        run: echo "dart_sdk_version=$(cat DART_SDK_VERSION)" >> $GITHUB_OUTPUT
+
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: ${{ steps.get-dart-version.outputs.dart_sdk_version }}
+
+      - run: |
+          sudo apt-get update
+          sudo apt-get install -y clang
+
+      - run: dart pub get
+        working-directory: sqliteraw
+
+      - run: dart run ffigen
+        working-directory: sqliteraw
+
+      - run: dart pub get
+        working-directory: sample/dart
+
+      - run: dart test
+        working-directory: sample/dart
+
+  sample-dart-test-ubuntu-latest:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: get-dart-version
+        run: echo "dart_sdk_version=$(cat DART_SDK_VERSION)" >> $GITHUB_OUTPUT
+
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: ${{ steps.get-dart-version.outputs.dart_sdk_version }}
+
+      - run: |
+          sudo apt-get update
+          sudo apt-get install -y clang
+
+      - run: dart pub get
+        working-directory: sqliteraw
+
+      - run: dart run ffigen
+        working-directory: sqliteraw
+
+      - run: dart pub get
+        working-directory: sample/dart
+
+      - run: dart test
+        working-directory: sample/dart
+
+  sample-dart-test-macos-latest:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: get-dart-version
+        run: echo "dart_sdk_version=$(cat DART_SDK_VERSION)" >> $GITHUB_OUTPUT
+
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: ${{ steps.get-dart-version.outputs.dart_sdk_version }}
+
+      - run: dart pub get
+        working-directory: sqliteraw
+
+      - run: dart run ffigen
+        working-directory: sqliteraw
+
+      - run: dart pub get
+        working-directory: sample/dart
+
+      - run: dart test
+        working-directory: sample/dart
+
+  sample-dart-test-windows-11-arm:
+    runs-on: windows-11-arm
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: get-dart-version
+        run: echo "dart_sdk_version=$(cat DART_SDK_VERSION)" >> $GITHUB_OUTPUT
+
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: ${{ steps.get-dart-version.outputs.dart_sdk_version }}
+
+      - run: dart pub get
+        working-directory: sqliteraw
+
+      - run: dart run ffigen
+        working-directory: sqliteraw
+
+      - run: dart pub get
+        working-directory: sample/dart
+
+      - run: dart test
+        working-directory: sample/dart
+
+  sample-dart-test-windows-latest:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: get-dart-version
+        run: echo "dart_sdk_version=$(cat DART_SDK_VERSION)" >> $GITHUB_OUTPUT
+
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: ${{ steps.get-dart-version.outputs.dart_sdk_version }}
+
+      - run: dart pub get
+        working-directory: sqliteraw
+
+      - run: dart run ffigen
+        working-directory: sqliteraw
+
+      - run: dart pub get
+        working-directory: sample/dart
+
+      - run: dart test
+        working-directory: sample/dart
