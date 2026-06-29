@@ -1,3 +1,4 @@
+import 'package:code_assets/code_assets.dart';
 import 'package:hooks/hooks.dart';
 import 'package:native_toolchain_c/native_toolchain_c.dart';
 
@@ -13,6 +14,13 @@ void main(List<String> args) async {
         'SQLITE_ENABLE_RTREE': null,
         'SQLITE_ENABLE_GEOPOLY': null,
       },
-    ).run(input: input, output: output);
+    ).run(
+      input: input,
+      output: output,
+      defines: {
+        if (input.config.code.targetOS == OS.windows)
+          'SQLITE_API': '__declspec(dllexport)',
+      },
+    );
   });
 }
