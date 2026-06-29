@@ -19,7 +19,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ steps.get-flutter-version.outputs.flutter_version }}
-          channel: stable
+          channel: master
 
       - run: |
           sudo apt-get update
@@ -105,7 +105,7 @@ jobs:
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: ${{ steps.get-flutter-version.outputs.flutter_version }}
-          channel: stable
+          channel: master
 
       - run: dart pub get
         working-directory: sqliteraw
