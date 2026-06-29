@@ -1,5 +1,5 @@
-import 'package:dart/dart.dart' as dart;
+import 'package:sqliteraw.dart/sqliteraw.dart';
 
 void main(List<String> arguments) {
-  print('Using sqliteraw.dart version ${dart.version()}!');
+  print('Using sqliteraw.dart version $SQLITE_VERSION!');
 }

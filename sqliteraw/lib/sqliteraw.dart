@@ -205,10 +205,12 @@ external ffi.Pointer<ffi.Char> sqlite3_mprintf(
   ffi.Pointer<ffi.Char> arg0,
 );
 
-@ffi.Native<ffi.Pointer<ffi.Char> Function(ffi.Pointer<ffi.Char>, va_list)>()
+@ffi.Native<
+    ffi.Pointer<ffi.Char> Function(
+        ffi.Pointer<ffi.Char>, ffi.Pointer<__va_list_tag>)>()
 external ffi.Pointer<ffi.Char> sqlite3_vmprintf(
   ffi.Pointer<ffi.Char> arg0,
-  va_list arg1,
+  ffi.Pointer<__va_list_tag> arg1,
 );
 
 @ffi.Native<
@@ -221,13 +223,13 @@ external ffi.Pointer<ffi.Char> sqlite3_snprintf(
 );
 
 @ffi.Native<
-    ffi.Pointer<ffi.Char> Function(
-        ffi.Int, ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>, va_list)>()
+    ffi.Pointer<ffi.Char> Function(ffi.Int, ffi.Pointer<ffi.Char>,
+        ffi.Pointer<ffi.Char>, ffi.Pointer<__va_list_tag>)>()
 external ffi.Pointer<ffi.Char> sqlite3_vsnprintf(
   int arg0,
   ffi.Pointer<ffi.Char> arg1,
   ffi.Pointer<ffi.Char> arg2,
-  va_list arg3,
+  ffi.Pointer<__va_list_tag> arg3,
 );
 
 @ffi.Native<ffi.Pointer<ffi.Void> Function(ffi.Int)>()
@@ -2107,12 +2109,12 @@ external void sqlite3_str_appendf(
 );
 
 @ffi.Native<
-    ffi.Void Function(
-        ffi.Pointer<sqlite3_str>, ffi.Pointer<ffi.Char>, va_list)>()
+    ffi.Void Function(ffi.Pointer<sqlite3_str>, ffi.Pointer<ffi.Char>,
+        ffi.Pointer<__va_list_tag>)>()
 external void sqlite3_str_vappendf(
   ffi.Pointer<sqlite3_str> arg0,
   ffi.Pointer<ffi.Char> zFormat,
-  va_list arg2,
+  ffi.Pointer<__va_list_tag> arg2,
 );
 
 @ffi.Native<
@@ -2581,10 +2583,6 @@ external int sqlite3_rtree_query_callback(
       xDestructor,
 );
 
-typedef __builtin_va_list = ffi.Pointer<ffi.Char>;
-typedef __gnuc_va_list = __builtin_va_list;
-typedef va_list = __builtin_va_list;
-
 final class sqlite3 extends ffi.Opaque {}
 
 typedef sqlite_int64 = ffi.LongLong;
@@ -2753,6 +2751,18 @@ final class sqlite3_mem_methods extends ffi.Struct {
       xShutdown;
 
   external ffi.Pointer<ffi.Void> pAppData;
+}
+
+final class __va_list_tag extends ffi.Struct {
+  @ffi.UnsignedInt()
+  external int gp_offset;
+
+  @ffi.UnsignedInt()
+  external int fp_offset;
+
+  external ffi.Pointer<ffi.Void> overflow_arg_area;
+
+  external ffi.Pointer<ffi.Void> reg_save_area;
 }
 
 final class sqlite3_stmt extends ffi.Opaque {}
@@ -3561,18 +3571,18 @@ final class fts5_api extends ffi.Struct {
       xFindTokenizer_v2;
 }
 
-const String SQLITE_VERSION = '3.53.2';
+const String SQLITE_VERSION = '3.53.3';
 
-const int SQLITE_VERSION_NUMBER = 3053002;
+const int SQLITE_VERSION_NUMBER = 3053003;
 
 const String SQLITE_SOURCE_ID =
-    '2026-06-03 19:12:13 d6e03d8c777cfa2d35e3b60d8ec3e0187f3e9f99d8e2ee9cac695fd6fcdf1a24';
+    '2026-06-26 20:14:12 d4c0e51e4aeb96955b99185ab9cde75c339e2c29c3f3f12428d364a10d782c62';
 
 const String SQLITE_SCM_BRANCH = 'branch-3.53';
 
-const String SQLITE_SCM_TAGS = 'release version-3.53.2';
+const String SQLITE_SCM_TAGS = 'release version-3.53.3';
 
-const String SQLITE_SCM_DATETIME = '2026-06-03T19:12:13.350Z';
+const String SQLITE_SCM_DATETIME = '2026-06-26T20:14:12.354Z';
 
 const int SQLITE_OK = 0;
 
