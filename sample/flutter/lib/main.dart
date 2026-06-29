@@ -11,11 +11,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Using sqliteraw.dart version ${sample.version()}!'),
-        ),
-      ),
+      home: Scaffold(body: Center(child: Text('Using sqliteraw_dart version ${sample.version()}!'))),
     );
   }
 }

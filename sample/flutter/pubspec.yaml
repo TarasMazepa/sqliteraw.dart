@@ -1,5 +1,5 @@
 name: sample_flutter
-description: Sample Flutter app using sqliteraw.dart
+description: Sample Flutter app using sqliteraw_dart
 publish_to: 'none'
 version: 0.1.0
 
@@ -9,7 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  sqliteraw.dart:
+  sqliteraw_dart:
     path: '../../sqliteraw'
 
 dev_dependencies:
