@@ -1,4 +1,4 @@
-name: sqliteraw_dart
+name: sqliteraw
 description: SQLite raw Dart ffi, no alterations, so that you can use the full SQLite C API
 version: 0.0.1-3530300
 repository: https://github.com/TarasMazepa/sqliteraw.dart
@@ -21,7 +21,7 @@ dev_dependencies:
 ffigen:
   output: 'lib/sqliteraw.dart'
   ffi-native:
-    asset-id: 'package:sqliteraw.dart/sqliteraw.dart'
+    asset-id: 'package:sqliteraw/sqliteraw.dart'
   headers:
     entry-points:
       - '../sqlite/sqlite3.h'

@@ -1,4 +1,4 @@
-import 'package:sqliteraw.dart/sqliteraw.dart';
+import 'package:sqliteraw/sqliteraw.dart';
 
 String version() {
   return SQLITE_VERSION;

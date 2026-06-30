@@ -313,13 +313,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.10.1"
-  "sqliteraw.dart":
+  sqliteraw:
     dependency: "direct main"
     description:
       path: "../../sqliteraw"
       relative: true
     source: path
-    version: "0.0.1-3530200"
+    version: "0.0.1-3530300"
   stack_trace:
     dependency: transitive
     description:
