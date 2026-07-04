@@ -1,12 +1,9 @@
 import 'package:ffi/ffi.dart';
-import 'package:sqliteraw/sqliteraw.dart' as sqliteraw;
+import 'package:sqliteraw/sqliteraw.dart';
 import 'package:test/test.dart';
 
 void main() {
   test('sqlite3_libversion', () {
-    expect(
-      sqliteraw.sqlite3_libversion().cast<Utf8>().toDartString(),
-      sqliteraw.SQLITE_VERSION,
-    );
+    expect(sqlite3_libversion().cast<Utf8>().toDartString(), SQLITE_VERSION);
   });
 }

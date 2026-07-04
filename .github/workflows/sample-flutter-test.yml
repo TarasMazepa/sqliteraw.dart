@@ -1,0 +1,68 @@
+name: sample-flutter-test.yml
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  sample-flutter-test-ubuntu-24-04-arm:
+    runs-on: ubuntu-24.04-arm
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: get-flutter-version
+        run: echo "flutter_version=$(cat FLUTTER_VERSION)" >> $GITHUB_OUTPUT
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ steps.get-flutter-version.outputs.flutter_version }}
+          channel: master
+
+      - run: |
+          sudo apt-get update
+          sudo apt-get install -y clang
+
+      - run: dart pub get
+        working-directory: sqliteraw
+
+      - run: dart run ffigen
+        working-directory: sqliteraw
+
+      - run: flutter pub get
+        working-directory: sample/flutter
+
+      - run: flutter test
+        working-directory: sample/flutter
+
+  sample-flutter-test-ubuntu-latest:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - id: get-flutter-version
+        run: echo "flutter_version=$(cat FLUTTER_VERSION)" >> $GITHUB_OUTPUT
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ steps.get-flutter-version.outputs.flutter_version }}
+          channel: stable
+
+      - run: |
+          sudo apt-get update
+          sudo apt-get install -y clang
+
+      - run: dart pub get
+        working-directory: sqliteraw
+
+      - run: dart run ffigen
+        working-directory: sqliteraw
+
+      - run: flutter pub get
+        working-directory: sample/flutter
+
+      - run: flutter test
+        working-directory: sample/flutter
