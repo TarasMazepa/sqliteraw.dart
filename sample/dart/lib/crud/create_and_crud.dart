@@ -4,6 +4,7 @@ import 'package:ffi/ffi.dart';
 import 'package:sqliteraw/sqliteraw.dart' as sr;
 import 'package:sqliteraw_sample_dart/crud/open_database.dart';
 import 'package:sqliteraw_sample_dart/utils/sqlite_helpers.dart';
+import 'package:sqliteraw_sample_dart/models/crud_demonstration_result.dart';
 import 'package:sqliteraw_sample_dart/models/todo_item.dart';
 
 const String createTodosTableSql = '''
@@ -60,14 +61,15 @@ List<TodoItem> selectTodos(Pointer<sr.sqlite3> db) {
   }
 }
 
-void updateTodoDone(Pointer<sr.sqlite3> db, int id, bool done) {
+void updateTodo(Pointer<sr.sqlite3> db, int id, {required bool done, required String title}) {
   final Pointer<sr.sqlite3_stmt> stmt = prepareStatement(
     db,
-    'update todos set done = ? where id = ?;',
+    'update todos set done = ?, title = ? where id = ?;',
   );
   try {
     bindInt(stmt, 1, done ? 1 : 0);
-    bindInt(stmt, 2, id);
+    bindText(stmt, 2, title);
+    bindInt(stmt, 3, id);
     final stepResult = sr.sqlite3_step(stmt);
     checkSqliteResult(stepResult, db, 'update todo');
   } finally {
@@ -89,18 +91,43 @@ void deleteTodo(Pointer<sr.sqlite3> db, int id) {
   }
 }
 
-/// Demonstrates creating a table and performing insert, read, update, delete.
-List<TodoItem> demonstrateCreateAndCrud(String path) {
+String formatTodoList(List<TodoItem> todos) {
+  if (todos.isEmpty) {
+    return '  (no todos)';
+  }
+  return todos
+      .map((todo) => '  [${todo.done ? '✅' : ' '}] ${todo.id}: ${todo.title}')
+      .join('\n');
+}
+
+/// Demonstrates creating a table, inserting todos, listing, updating, and deleting.
+CrudDemonstrationResult demonstrateCreateAndCrud(String path) {
   final Pointer<sr.sqlite3> db = openDatabaseFile(path);
   try {
     createTodosTable(db);
 
-    final int firstId = insertTodo(db, 'Buy milk');
-    final int secondId = insertTodo(db, 'Write samples');
-    updateTodoDone(db, firstId, true);
-    deleteTodo(db, secondId);
+    insertTodo(db, 'Buy milk');
+    insertTodo(db, 'Write samples');
+    final List<TodoItem> afterInsert = selectTodos(db);
 
-    return selectTodos(db);
+    final TodoItem todoToUpdate = afterInsert.last;
+    updateTodo(
+      db,
+      todoToUpdate.id,
+      done: true,
+      title: '${todoToUpdate.title} Updated',
+    );
+    final List<TodoItem> afterUpdate = selectTodos(db);
+
+    final int deleteId = afterInsert.last.id;
+    deleteTodo(db, deleteId);
+    final List<TodoItem> afterDelete = selectTodos(db);
+
+    return CrudDemonstrationResult(
+      afterInsert: afterInsert,
+      afterUpdate: afterUpdate,
+      afterDelete: afterDelete,
+    );
   } finally {
     closeDatabase(db);
   }

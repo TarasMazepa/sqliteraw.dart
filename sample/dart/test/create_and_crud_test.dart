@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:sqliteraw_sample_dart/crud/create_and_crud.dart';
-import 'package:sqliteraw_sample_dart/models/todo_item.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -17,11 +16,21 @@ void main() {
     tempDir.deleteSync(recursive: true);
   });
 
-  test('demonstrateCreateAndCrud inserts, updates, and deletes todos', () {
-    final List<TodoItem> todos = demonstrateCreateAndCrud(databasePath);
+  test('demonstrateCreateAndCrud inserts, lists, updates, and deletes todos', () {
+    final result = demonstrateCreateAndCrud(databasePath);
 
-    expect(todos, hasLength(1));
-    expect(todos.first.title, 'Buy milk');
-    expect(todos.first.done, isTrue);
+    expect(result.afterInsert, hasLength(2));
+    expect(result.afterInsert.first.title, 'Buy milk');
+    expect(result.afterInsert.first.done, isFalse);
+    expect(result.afterInsert.last.title, 'Write samples');
+
+    expect(result.afterUpdate, hasLength(2));
+    expect(result.afterUpdate.first.title, 'Buy milk Updated');
+    expect(result.afterUpdate.first.done, isTrue);
+    expect(result.afterUpdate.last.done, isFalse);
+
+    expect(result.afterDelete, hasLength(1));
+    expect(result.afterDelete.first.title, 'Buy milk Updated');
+    expect(result.afterDelete.first.done, isTrue);
   });
 }

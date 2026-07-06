@@ -32,7 +32,7 @@ void main() {
     try {
       final todos = selectTodos(backupDb);
       expect(todos, hasLength(1));
-      expect(todos.first.title, 'Buy milk');
+      expect(todos.first.title, 'Buy milk Updated');
       expect(todos.first.done, isTrue);
     } finally {
       closeDatabase(backupDb);

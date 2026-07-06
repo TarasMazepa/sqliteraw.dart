@@ -4,7 +4,7 @@ import 'package:sqliteraw/sqliteraw.dart';
 import 'package:sqliteraw_sample_dart/crud/backup.dart';
 import 'package:sqliteraw_sample_dart/crud/create_and_crud.dart';
 import 'package:sqliteraw_sample_dart/crud/open_database.dart';
-import 'package:sqliteraw_sample_dart/models/todo_item.dart';
+import 'package:sqliteraw_sample_dart/models/crud_demonstration_result.dart';
 
 void main(List<String> arguments) {
   runAllExamples(directoryPath: arguments.isNotEmpty ? arguments.first : null);
@@ -24,11 +24,13 @@ void runAllExamples({String? directoryPath}) {
 
   final String crudPath = '$baseDirectory/sqliteraw_crud_example.db';
   stdout.writeln('> dart run example/create_and_crud.dart $crudPath');
-  final List<TodoItem> todos = demonstrateCreateAndCrud(crudPath);
-  stdout.writeln('Database at $crudPath contains ${todos.length} todo(s):');
-  for (final TodoItem todo in todos) {
-    stdout.writeln('  [${todo.done ? 'x' : ' '}] ${todo.id}: ${todo.title}');
-  }
+  final CrudDemonstrationResult crudResult = demonstrateCreateAndCrud(crudPath);
+  stdout.writeln('After insert:');
+  stdout.writeln(formatTodoList(crudResult.afterInsert));
+  stdout.writeln('After update:');
+  stdout.writeln(formatTodoList(crudResult.afterUpdate));
+  stdout.writeln('After delete:');
+  stdout.writeln(formatTodoList(crudResult.afterDelete));
   stdout.writeln();
 
   final String sourcePath = '$baseDirectory/sqliteraw_backup_source.db';
