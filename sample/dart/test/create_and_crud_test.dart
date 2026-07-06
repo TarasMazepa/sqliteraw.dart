@@ -25,12 +25,13 @@ void main() {
     expect(result.afterInsert.last.title, 'Write samples');
 
     expect(result.afterUpdate, hasLength(2));
-    expect(result.afterUpdate.first.title, 'Buy milk Updated');
-    expect(result.afterUpdate.first.done, isTrue);
-    expect(result.afterUpdate.last.done, isFalse);
+    expect(result.afterUpdate.first.title, 'Buy milk');
+    expect(result.afterUpdate.first.done, isFalse);
+    expect(result.afterUpdate.last.title, 'Write samples Updated');
+    expect(result.afterUpdate.last.done, isTrue);
 
     expect(result.afterDelete, hasLength(1));
-    expect(result.afterDelete.first.title, 'Buy milk Updated');
-    expect(result.afterDelete.first.done, isTrue);
+    expect(result.afterDelete.first.title, 'Buy milk');
+    expect(result.afterDelete.first.done, isFalse);
   });
 }
