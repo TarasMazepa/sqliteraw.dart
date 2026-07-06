@@ -2,9 +2,9 @@ import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
 import 'package:sqliteraw/sqliteraw.dart' as sr;
-import 'package:sqliteraw_sample_dart/example/open_database.dart';
-import 'package:sqliteraw_sample_dart/sqlite_helpers.dart';
-import 'package:sqliteraw_sample_dart/todo_item.dart';
+import 'package:sqliteraw_sample_dart/crud/open_database.dart';
+import 'package:sqliteraw_sample_dart/utils/sqlite_helpers.dart';
+import 'package:sqliteraw_sample_dart/models/todo_item.dart';
 
 const String createTodosTableSql = '''
 create table if not exists todos (

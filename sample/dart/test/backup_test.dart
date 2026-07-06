@@ -2,9 +2,9 @@ import 'dart:ffi';
 import 'dart:io';
 
 import 'package:sqliteraw/sqliteraw.dart' as sr;
-import 'package:sqliteraw_sample_dart/example/backup.dart';
-import 'package:sqliteraw_sample_dart/example/create_and_crud.dart';
-import 'package:sqliteraw_sample_dart/sqlite_helpers.dart';
+import 'package:sqliteraw_sample_dart/crud/backup.dart';
+import 'package:sqliteraw_sample_dart/crud/create_and_crud.dart';
+import 'package:sqliteraw_sample_dart/utils/sqlite_helpers.dart';
 import 'package:test/test.dart';
 
 void main() {

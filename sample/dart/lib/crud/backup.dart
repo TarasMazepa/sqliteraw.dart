@@ -2,7 +2,7 @@ import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
 import 'package:sqliteraw/sqliteraw.dart' as sr;
-import 'package:sqliteraw_sample_dart/sqlite_helpers.dart';
+import 'package:sqliteraw_sample_dart/utils/sqlite_helpers.dart';
 
 /// Copies all data from [sourcePath] into [destinationPath] using the
 /// sqlite3 online backup API.

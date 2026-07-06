@@ -1,7 +1,7 @@
 import 'dart:ffi';
 
 import 'package:sqliteraw/sqliteraw.dart' as sr;
-import 'package:sqliteraw_sample_dart/sqlite_helpers.dart';
+import 'package:sqliteraw_sample_dart/utils/sqlite_helpers.dart';
 
 /// Opens a SQLite database at [path], creating it if it does not exist.
 ///

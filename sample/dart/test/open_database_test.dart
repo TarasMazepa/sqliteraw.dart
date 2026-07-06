@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:sqliteraw_sample_dart/example/open_database.dart';
+import 'package:sqliteraw_sample_dart/crud/open_database.dart';
 import 'package:test/test.dart';
 
 void main() {

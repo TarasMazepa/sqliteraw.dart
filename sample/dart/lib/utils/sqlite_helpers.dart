@@ -2,7 +2,7 @@ import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
 import 'package:sqliteraw/sqliteraw.dart' as sr;
-import 'package:sqliteraw_sample_dart/sqlite_exception.dart';
+import 'package:sqliteraw_sample_dart/utils/sqlite_exception.dart';
 
 typedef SqliteDestructor = Void Function(Pointer<Void>);
 

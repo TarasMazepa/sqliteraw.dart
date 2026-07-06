@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:sqliteraw_sample_dart/example/create_and_crud.dart';
-import 'package:sqliteraw_sample_dart/todo_item.dart';
+import 'package:sqliteraw_sample_dart/crud/create_and_crud.dart';
+import 'package:sqliteraw_sample_dart/models/todo_item.dart';
 import 'package:test/test.dart';
 
 void main() {
