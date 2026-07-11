@@ -1,6 +1,6 @@
 import 'package:ffi/ffi.dart';
-import 'package:sqliteraw/sqliteraw.dart' as ffi;
 import 'package:flutter_test/flutter_test.dart';
+import 'package:sqliteraw/sqliteraw_native.dart' as ffi;
 
 void main() {
   test('sqlite3_libversion', () {
