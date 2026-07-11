@@ -1,0 +1,27 @@
+name: sqlite-wasm-build.yml
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  sqlite-wasm-build-ubuntu-latest:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - run: |
+          sudo apt-get update
+          sudo apt-get install -y clang-18 lld-18
+          echo "CLANG=clang-18" >> "$GITHUB_ENV"
+          echo "WASM_LD=wasm-ld-18" >> "$GITHUB_ENV"
+
+      - run: wasm/tool/build_wasm.sh
+        working-directory: sqliteraw
+
+      - run: test -f wasm/out/sqliteraw.wasm
+        working-directory: sqliteraw
