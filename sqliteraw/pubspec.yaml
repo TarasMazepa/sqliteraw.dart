@@ -12,6 +12,11 @@ dependencies:
   hooks: ^2.0.2
   logging: ^1.3.0
   native_toolchain_c: ^0.19.1
+  web: ^1.1.1
+
+flutter:
+  assets:
+    - wasm/out/sqliteraw.wasm
 
 dev_dependencies:
   ffigen: ^17.0.0
@@ -19,7 +24,7 @@ dev_dependencies:
   test: ^1.24.0
 
 ffigen:
-  output: 'lib/sqliteraw.dart'
+  output: 'lib/src/native/bindings.dart'
   ffi-native:
     asset-id: 'package:sqliteraw/sqliteraw.dart'
   headers:
