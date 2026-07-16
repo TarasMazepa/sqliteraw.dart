@@ -21,11 +21,13 @@ jobs:
           channel: master
 
       - run: |
-          sudo apt-get update
-          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
-            -o Acquire::Retries=5 \
-            -o Acquire::ForceIPv4=true \
-            clang-18 lld-18
+          if ! command -v clang-18 >/dev/null || ! command -v wasm-ld-18 >/dev/null; then
+            sudo apt-get update
+            sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+              -o Acquire::Retries=5 \
+              -o Acquire::ForceIPv4=true \
+              clang-18 lld-18
+          fi
           sudo ln -sfn "$(command -v clang-18)" /usr/local/bin/clang
           sudo ln -sfn "$(command -v clang++-18)" /usr/local/bin/clang++
 
@@ -62,11 +64,13 @@ jobs:
           channel: stable
 
       - run: |
-          sudo apt-get update
-          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
-            -o Acquire::Retries=5 \
-            -o Acquire::ForceIPv4=true \
-            clang-18 lld-18
+          if ! command -v clang-18 >/dev/null || ! command -v wasm-ld-18 >/dev/null; then
+            sudo apt-get update
+            sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+              -o Acquire::Retries=5 \
+              -o Acquire::ForceIPv4=true \
+              clang-18 lld-18
+          fi
           sudo ln -sfn "$(command -v clang-18)" /usr/local/bin/clang
           sudo ln -sfn "$(command -v clang++-18)" /usr/local/bin/clang++
 
