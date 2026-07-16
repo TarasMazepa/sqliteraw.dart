@@ -1,5 +1,5 @@
 import 'package:ffi/ffi.dart';
-import 'package:sqliteraw/sqliteraw.dart';
+import 'package:sqliteraw/sqliteraw_native.dart';
 import 'package:test/test.dart';
 
 void main() {
