@@ -13,6 +13,27 @@ out_dir="${wasm_dir}/out"
 out_file="${out_dir}/sqliteraw.wasm"
 wasm_target="wasm32-unknown-unknown"
 
+resolve_executable() {
+  local candidate="$1"
+  if [ -z "${candidate}" ]; then
+    return 1
+  fi
+  if [ -x "${candidate}" ]; then
+    echo "${candidate}"
+    return 0
+  fi
+  # Bare command names (e.g. CI sets CLANG=clang-18) need PATH lookup.
+  if [[ "${candidate}" != /* ]]; then
+    local resolved
+    resolved="$(command -v "${candidate}" 2>/dev/null || true)"
+    if [ -n "${resolved}" ] && [ -x "${resolved}" ]; then
+      echo "${resolved}"
+      return 0
+    fi
+  fi
+  return 1
+}
+
 resolve_clang() {
   if [ -n "${CLANG:-}" ]; then
     candidates=("${CLANG}")
@@ -25,11 +46,13 @@ resolve_clang() {
   fi
 
   for candidate in "${candidates[@]}"; do
-    if [ -z "${candidate}" ] || [ ! -x "${candidate}" ]; then
+    local resolved
+    resolved="$(resolve_executable "${candidate}" || true)"
+    if [ -z "${resolved}" ]; then
       continue
     fi
-    if "${candidate}" --target="${wasm_target}" -c -x c /dev/null -o /dev/null 2>/dev/null; then
-      echo "${candidate}"
+    if "${resolved}" --target="${wasm_target}" -c -x c /dev/null -o /dev/null 2>/dev/null; then
+      echo "${resolved}"
       return 0
     fi
   done
@@ -38,12 +61,8 @@ resolve_clang() {
 }
 
 resolve_wasm_ld() {
-  if [ -n "${WASM_LD:-}" ] && [ -x "${WASM_LD}" ]; then
-    echo "${WASM_LD}"
-    return 0
-  fi
-
   local candidates=(
+    "${WASM_LD:-}"
     "$(command -v wasm-ld 2>/dev/null || true)"
     "/opt/homebrew/bin/wasm-ld"
     "/usr/local/bin/wasm-ld"
@@ -52,8 +71,10 @@ resolve_wasm_ld() {
   )
 
   for candidate in "${candidates[@]}"; do
-    if [ -n "${candidate}" ] && [ -x "${candidate}" ]; then
-      echo "${candidate}"
+    local resolved
+    resolved="$(resolve_executable "${candidate}" || true)"
+    if [ -n "${resolved}" ]; then
+      echo "${resolved}"
       return 0
     fi
   done
