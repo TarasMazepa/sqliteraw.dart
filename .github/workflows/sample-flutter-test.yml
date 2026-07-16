@@ -22,7 +22,12 @@ jobs:
 
       - run: |
           sudo apt-get update
-          sudo apt-get install -y clang clang-18 lld-18
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+            -o Acquire::Retries=5 \
+            -o Acquire::ForceIPv4=true \
+            clang-18 lld-18
+          sudo ln -sfn "$(command -v clang-18)" /usr/local/bin/clang
+          sudo ln -sfn "$(command -v clang++-18)" /usr/local/bin/clang++
 
       - run: dart pub get
         working-directory: sqliteraw
@@ -58,7 +63,12 @@ jobs:
 
       - run: |
           sudo apt-get update
-          sudo apt-get install -y clang clang-18 lld-18
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+            -o Acquire::Retries=5 \
+            -o Acquire::ForceIPv4=true \
+            clang-18 lld-18
+          sudo ln -sfn "$(command -v clang-18)" /usr/local/bin/clang
+          sudo ln -sfn "$(command -v clang++-18)" /usr/local/bin/clang++
 
       - run: dart pub get
         working-directory: sqliteraw
