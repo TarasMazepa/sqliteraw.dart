@@ -13,10 +13,19 @@ dependencies:
     path: '../../sqliteraw'
 
 dev_dependencies:
-  ffi: ^2.1.4
+  ffi:
+    git:
+      url: https://github.com/TarasMazepa/dart-lang-native.git
+      path: pkgs/ffi
   flutter_test:
     sdk: flutter
   flutter_lints: ^6.0.0
+
+dependency_overrides:
+  ffi:
+    git:
+      url: https://github.com/TarasMazepa/dart-lang-native.git
+      path: pkgs/ffi
 
 flutter:
   uses-material-design: true

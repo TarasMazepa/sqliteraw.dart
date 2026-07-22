@@ -2,24 +2,37 @@ name: sqliteraw
 description: SQLite raw Dart ffi, no alterations, so that you can use the full SQLite C API
 version: 0.0.1-3530300
 repository: https://github.com/TarasMazepa/sqliteraw.dart
+publish_to: none
 
 environment:
   sdk: ^3.10.0
 
 dependencies:
   code_assets: ^1.2.1
-  ffi: ^2.1.4
+  ffi:
+    git:
+      url: https://github.com/TarasMazepa/dart-lang-native.git
+      path: pkgs/ffi
   hooks: ^2.0.2
   logging: ^1.3.0
   native_toolchain_c: ^0.19.1
 
 dev_dependencies:
-  ffigen: ^17.0.0
+  ffigen:
+    git:
+      url: https://github.com/TarasMazepa/dart-lang-native.git
+      path: pkgs/ffigen
   lints: ^5.0.0
   test: ^1.24.0
 
+dependency_overrides:
+  ffi:
+    git:
+      url: https://github.com/TarasMazepa/dart-lang-native.git
+      path: pkgs/ffi
+
 ffigen:
-  output: 'lib/sqliteraw.dart'
+  output: 'lib/src/native/bindings.dart'
   ffi-native:
     asset-id: 'package:sqliteraw/sqliteraw.dart'
   headers:
