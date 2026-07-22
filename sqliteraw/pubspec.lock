@@ -100,19 +100,21 @@ packages:
   ffi:
     dependency: "direct main"
     description:
-      name: ffi
-      sha256: "289279317b4b16eb2bb7e271abccd4bf84ec9bdcbe999e278a94b804f5630418"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.4"
+      path: "pkgs/ffi"
+      ref: HEAD
+      resolved-ref: "3168d460f46eb738a4a430f18765907c93059119"
+      url: "https://github.com/TarasMazepa/dart-lang-native.git"
+    source: git
+    version: "2.2.0"
   ffigen:
     dependency: "direct dev"
     description:
-      name: ffigen
-      sha256: "2648b974fb322b81f7450e9713f8651653e9b1353ac9bc04fab89530715e7b24"
-      url: "https://pub.dev"
-    source: hosted
-    version: "17.0.0"
+      path: "pkgs/ffigen"
+      ref: HEAD
+      resolved-ref: "3168d460f46eb738a4a430f18765907c93059119"
+      url: "https://github.com/TarasMazepa/dart-lang-native.git"
+    source: git
+    version: "21.0.1-wip"
   file:
     dependency: transitive
     description:
