@@ -3561,18 +3561,18 @@ final class fts5_api extends ffi.Struct {
       xFindTokenizer_v2;
 }
 
-const String SQLITE_VERSION = '3.53.3';
+const String SQLITE_VERSION = '3.53.4';
 
-const int SQLITE_VERSION_NUMBER = 3053003;
+const int SQLITE_VERSION_NUMBER = 3053004;
 
 const String SQLITE_SOURCE_ID =
-    '2026-06-26 20:14:12 d4c0e51e4aeb96955b99185ab9cde75c339e2c29c3f3f12428d364a10d782c62';
+    '2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc';
 
 const String SQLITE_SCM_BRANCH = 'branch-3.53';
 
-const String SQLITE_SCM_TAGS = 'release version-3.53.3';
+const String SQLITE_SCM_TAGS = 'release version-3.53.4';
 
-const String SQLITE_SCM_DATETIME = '2026-06-26T20:14:12.354Z';
+const String SQLITE_SCM_DATETIME = '2026-07-24T19:02:57.525Z';
 
 const int SQLITE_OK = 0;
 

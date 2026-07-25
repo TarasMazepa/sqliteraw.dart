@@ -19,7 +19,7 @@ dev_dependencies:
   test: ^1.24.0
 
 ffigen:
-  output: 'lib/sqliteraw.dart'
+  output: 'lib/src/native/bindings.dart'
   ffi-native:
     asset-id: 'package:sqliteraw/sqliteraw.dart'
   headers:

@@ -1,7 +1,7 @@
 import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
-import 'package:sqliteraw/sqliteraw.dart';
+import 'package:sqliteraw/sqliteraw_native.dart';
 
 void main() {
   print('SQLite ${sqlite3_libversion().cast<Utf8>().toDartString()}');
