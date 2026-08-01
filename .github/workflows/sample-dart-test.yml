@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-24.04-arm
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - id: get-dart-version
         run: echo "dart_sdk_version=$(cat DART_SDK_VERSION)" >> $GITHUB_OUTPUT
@@ -39,7 +39,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - id: get-dart-version
         run: echo "dart_sdk_version=$(cat DART_SDK_VERSION)" >> $GITHUB_OUTPUT
