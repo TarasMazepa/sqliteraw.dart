@@ -150,6 +150,11 @@ external int sqlite3_complete16(
   ffi.Pointer<ffi.Void> sql,
 );
 
+@ffi.Native<sqlite3_int64 Function(ffi.Pointer<ffi.Char>)>()
+external int sqlite3_incomplete(
+  ffi.Pointer<ffi.Char> sql,
+);
+
 @ffi.Native<
     ffi.Int Function(
         ffi.Pointer<sqlite3>,
@@ -2102,6 +2107,15 @@ external void sqlite3_str_free(
 );
 
 @ffi.Native<
+    ffi.Void Function(
+        ffi.Pointer<sqlite3_context>, ffi.Pointer<sqlite3_str>, ffi.Int)>()
+external void sqlite3_result_str(
+  ffi.Pointer<sqlite3_context> arg0,
+  ffi.Pointer<sqlite3_str> arg1,
+  int arg2,
+);
+
+@ffi.Native<
     ffi.Void Function(ffi.Pointer<sqlite3_str>, ffi.Pointer<ffi.Char>)>()
 external void sqlite3_str_appendf(
   ffi.Pointer<sqlite3_str> arg0,
@@ -3571,18 +3585,18 @@ final class fts5_api extends ffi.Struct {
       xFindTokenizer_v2;
 }
 
-const String SQLITE_VERSION = '3.53.4';
+const String SQLITE_VERSION = '3.54.0';
 
-const int SQLITE_VERSION_NUMBER = 3053004;
+const int SQLITE_VERSION_NUMBER = 3054000;
 
 const String SQLITE_SOURCE_ID =
-    '2026-07-24 19:02:57 bf7c7f30031888f4e796e429ab3978879485813aaca6f641c7b33e4e09459bcc';
+    '2026-10-09 15:46:58 be8d059e9a49089ab2dce5ed26dd87aaf598fdc5fbe0b107c0dd758464bcd5e3';
 
-const String SQLITE_SCM_BRANCH = 'branch-3.53';
+const String SQLITE_SCM_BRANCH = 'trunk';
 
-const String SQLITE_SCM_TAGS = 'release version-3.53.4';
+const String SQLITE_SCM_TAGS = 'release major-release version-3.54.0';
 
-const String SQLITE_SCM_DATETIME = '2026-07-24T19:02:57.525Z';
+const String SQLITE_SCM_DATETIME = '2026-10-09T15:46:58.543Z';
 
 const int SQLITE_OK = 0;
 
@@ -4192,8 +4206,6 @@ const int SQLITE_FUNCTION = 31;
 
 const int SQLITE_SAVEPOINT = 32;
 
-const int SQLITE_COPY = 0;
-
 const int SQLITE_RECURSIVE = 33;
 
 const int SQLITE_TRACE_STMT = 1;
@@ -4229,6 +4241,10 @@ const int SQLITE_LIMIT_TRIGGER_DEPTH = 10;
 const int SQLITE_LIMIT_WORKER_THREADS = 11;
 
 const int SQLITE_LIMIT_PARSER_DEPTH = 12;
+
+const int SQLITE_LIMIT_SCHEMA = 13;
+
+const int SQLITE_LIMIT_TRIGGER_STEPS = 14;
 
 const int SQLITE_PREPARE_PERSISTENT = 1;
 
@@ -4435,6 +4451,12 @@ const int SQLITE_TESTCTRL_USELONGDOUBLE = 34;
 const int SQLITE_TESTCTRL_ATOF = 34;
 
 const int SQLITE_TESTCTRL_LAST = 34;
+
+const int SQLITE_COPY = 0;
+
+const int SQLITE_XFER = 1;
+
+const int SQLITE_FINISH = 2;
 
 const int SQLITE_STATUS_MEMORY_USED = 0;
 
