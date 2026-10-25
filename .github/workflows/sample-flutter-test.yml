@@ -21,14 +21,27 @@ jobs:
           channel: master
 
       - run: |
-          sudo apt-get update
-          sudo apt-get install -y clang
+          if ! command -v clang-18 >/dev/null || ! command -v wasm-ld-18 >/dev/null; then
+            sudo apt-get update
+            sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+              -o Acquire::Retries=5 \
+              -o Acquire::ForceIPv4=true \
+              clang-18 lld-18
+          fi
+          sudo ln -sfn "$(command -v clang-18)" /usr/local/bin/clang
+          sudo ln -sfn "$(command -v clang++-18)" /usr/local/bin/clang++
 
       - run: dart pub get
         working-directory: sqliteraw
 
       - run: dart run ffigen
         working-directory: sqliteraw
+
+      - run: wasm/tool/build_wasm.sh
+        working-directory: sqliteraw
+        env:
+          CLANG: clang-18
+          WASM_LD: wasm-ld-18
 
       - run: flutter pub get
         working-directory: sample/flutter
@@ -51,14 +64,27 @@ jobs:
           channel: stable
 
       - run: |
-          sudo apt-get update
-          sudo apt-get install -y clang
+          if ! command -v clang-18 >/dev/null || ! command -v wasm-ld-18 >/dev/null; then
+            sudo apt-get update
+            sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+              -o Acquire::Retries=5 \
+              -o Acquire::ForceIPv4=true \
+              clang-18 lld-18
+          fi
+          sudo ln -sfn "$(command -v clang-18)" /usr/local/bin/clang
+          sudo ln -sfn "$(command -v clang++-18)" /usr/local/bin/clang++
 
       - run: dart pub get
         working-directory: sqliteraw
 
       - run: dart run ffigen
         working-directory: sqliteraw
+
+      - run: wasm/tool/build_wasm.sh
+        working-directory: sqliteraw
+        env:
+          CLANG: clang-18
+          WASM_LD: wasm-ld-18
 
       - run: flutter pub get
         working-directory: sample/flutter

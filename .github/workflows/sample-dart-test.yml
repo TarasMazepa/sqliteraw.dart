@@ -20,8 +20,20 @@ jobs:
           sdk: ${{ steps.get-dart-version.outputs.dart_sdk_version }}
 
       - run: |
-          sudo apt-get update
-          sudo apt-get install -y clang
+          if command -v clang >/dev/null; then
+            echo "Using $(command -v clang)"
+          elif command -v clang-18 >/dev/null; then
+            sudo ln -sfn "$(command -v clang-18)" /usr/local/bin/clang
+            sudo ln -sfn "$(command -v clang++-18)" /usr/local/bin/clang++
+          else
+            sudo apt-get update
+            sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+              -o Acquire::Retries=5 \
+              -o Acquire::ForceIPv4=true \
+              clang-18
+            sudo ln -sfn "$(command -v clang-18)" /usr/local/bin/clang
+            sudo ln -sfn "$(command -v clang++-18)" /usr/local/bin/clang++
+          fi
 
       - run: dart pub get
         working-directory: sqliteraw
@@ -49,8 +61,20 @@ jobs:
           sdk: ${{ steps.get-dart-version.outputs.dart_sdk_version }}
 
       - run: |
-          sudo apt-get update
-          sudo apt-get install -y clang
+          if command -v clang >/dev/null; then
+            echo "Using $(command -v clang)"
+          elif command -v clang-18 >/dev/null; then
+            sudo ln -sfn "$(command -v clang-18)" /usr/local/bin/clang
+            sudo ln -sfn "$(command -v clang++-18)" /usr/local/bin/clang++
+          else
+            sudo apt-get update
+            sudo DEBIAN_FRONTEND=noninteractive apt-get install -y \
+              -o Acquire::Retries=5 \
+              -o Acquire::ForceIPv4=true \
+              clang-18
+            sudo ln -sfn "$(command -v clang-18)" /usr/local/bin/clang
+            sudo ln -sfn "$(command -v clang++-18)" /usr/local/bin/clang++
+          fi
 
       - run: dart pub get
         working-directory: sqliteraw
@@ -63,4 +87,3 @@ jobs:
 
       - run: dart test
         working-directory: sample/dart
-
