@@ -17,7 +17,10 @@ void main(List<String> args) async {
     ).run(
       input: input,
       output: output,
-      defines: {if (input.config.code.targetOS == OS.windows) 'SQLITE_API': '__declspec(dllexport)'},
+      defines: {
+        if (input.config.code.targetOS == OS.windows)
+          'SQLITE_API': '__declspec(dllexport)',
+      },
     );
   });
 }

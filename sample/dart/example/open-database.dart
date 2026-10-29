@@ -1,7 +1,7 @@
 import 'dart:ffi';
 
 import 'package:ffi/ffi.dart';
-import 'package:sqliteraw/sqliteraw_native.dart';
+import 'package:sqliteraw/sqliteraw-native.dart';
 
 void main() {
   print('SQLite ${sqlite3_libversion().cast<Utf8>().toDartString()}');
@@ -33,7 +33,13 @@ void main() {
     ''';
     final createTableSql = createTableStatement.toNativeUtf8();
     try {
-      final createTableResult = sqlite3_exec(db, createTableSql.cast(), nullptr, nullptr, nullptr);
+      final createTableResult = sqlite3_exec(
+        db,
+        createTableSql.cast(),
+        nullptr,
+        nullptr,
+        nullptr,
+      );
       if (createTableResult != SQLITE_OK) {
         throw StateError(
           'sqlite3_exec failed: $createTableResult '
@@ -50,9 +56,17 @@ void main() {
     // Insert record
     const firstRecordId = 1;
     const firstRecordTitle = 'Learn sqliteraw';
-    final insertSql = "insert into todos (id, title) values ($firstRecordId, '$firstRecordTitle')".toNativeUtf8();
+    final insertSql =
+        "insert into todos (id, title) values ($firstRecordId, '$firstRecordTitle')"
+            .toNativeUtf8();
     try {
-      final insertResult = sqlite3_exec(db, insertSql.cast(), nullptr, nullptr, nullptr);
+      final insertResult = sqlite3_exec(
+        db,
+        insertSql.cast(),
+        nullptr,
+        nullptr,
+        nullptr,
+      );
       if (insertResult != SQLITE_OK) {
         throw StateError(
           'sqlite3_exec failed: $insertResult '
@@ -68,10 +82,17 @@ void main() {
 
     const secondRecordId = 2;
     const secondRecordTitle = 'Write more samples';
-    final insertSecondSql = "insert into todos (id, title) values ($secondRecordId, '$secondRecordTitle')"
-        .toNativeUtf8();
+    final insertSecondSql =
+        "insert into todos (id, title) values ($secondRecordId, '$secondRecordTitle')"
+            .toNativeUtf8();
     try {
-      final insertSecondResult = sqlite3_exec(db, insertSecondSql.cast(), nullptr, nullptr, nullptr);
+      final insertSecondResult = sqlite3_exec(
+        db,
+        insertSecondSql.cast(),
+        nullptr,
+        nullptr,
+        nullptr,
+      );
       if (insertSecondResult != SQLITE_OK) {
         throw StateError(
           'sqlite3_exec failed: $insertSecondResult '
@@ -88,9 +109,17 @@ void main() {
     // Update record
     const updateRecordId = 1;
     const updatedTitle = 'Learn sqliteraw basics';
-    final updateSql = "update todos set title = '$updatedTitle' where id = $updateRecordId".toNativeUtf8();
+    final updateSql =
+        "update todos set title = '$updatedTitle' where id = $updateRecordId"
+            .toNativeUtf8();
     try {
-      final updateResult = sqlite3_exec(db, updateSql.cast(), nullptr, nullptr, nullptr);
+      final updateResult = sqlite3_exec(
+        db,
+        updateSql.cast(),
+        nullptr,
+        nullptr,
+        nullptr,
+      );
       if (updateResult != SQLITE_OK) {
         throw StateError(
           'sqlite3_exec failed: $updateResult '
@@ -106,16 +135,25 @@ void main() {
 
     // Delete record
     const deleteRecordId = 2;
-    final deleteSql = 'delete from todos where id = $deleteRecordId'.toNativeUtf8();
+    final deleteSql = 'delete from todos where id = $deleteRecordId'
+        .toNativeUtf8();
     try {
-      final deleteResult = sqlite3_exec(db, deleteSql.cast(), nullptr, nullptr, nullptr);
+      final deleteResult = sqlite3_exec(
+        db,
+        deleteSql.cast(),
+        nullptr,
+        nullptr,
+        nullptr,
+      );
       if (deleteResult != SQLITE_OK) {
         throw StateError(
           'sqlite3_exec failed: $deleteResult '
           '${sqlite3_errmsg(db).cast<Utf8>().toDartString()}',
         );
       }
-      print('\nDelete record: id=$deleteRecordId, rowsChanged=${sqlite3_changes(db)}, result=$deleteResult');
+      print(
+        '\nDelete record: id=$deleteRecordId, rowsChanged=${sqlite3_changes(db)}, result=$deleteResult',
+      );
     } finally {
       calloc.free(deleteSql);
     }
@@ -125,7 +163,13 @@ void main() {
     try {
       final selectSql = 'select id, title from todos'.toNativeUtf8();
       try {
-        final prepareResult = sqlite3_prepare_v2(db, selectSql.cast(), -1, statement, nullptr);
+        final prepareResult = sqlite3_prepare_v2(
+          db,
+          selectSql.cast(),
+          -1,
+          statement,
+          nullptr,
+        );
         if (prepareResult != SQLITE_OK) {
           throw StateError(
             'sqlite3_prepare_v2 failed: $prepareResult '
@@ -136,7 +180,10 @@ void main() {
         final stmt = statement.value;
         while (sqlite3_step(stmt) == SQLITE_ROW) {
           final id = sqlite3_column_int(stmt, 0);
-          final title = sqlite3_column_text(stmt, 1).cast<Utf8>().toDartString();
+          final title = sqlite3_column_text(
+            stmt,
+            1,
+          ).cast<Utf8>().toDartString();
           print('\n$id: $title');
         }
       } finally {

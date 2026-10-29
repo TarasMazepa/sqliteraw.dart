@@ -319,7 +319,7 @@ packages:
       path: "../../sqliteraw"
       relative: true
     source: path
-    version: "0.0.1-3530400"
+    version: "0.0.1-3540100"
   stack_trace:
     dependency: transitive
     description:

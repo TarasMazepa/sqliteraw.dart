@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sample_flutter/sample_flutter.dart' as sample;
+import 'package:sample_flutter/sample-flutter.dart' as sample;
 
 void main() {
   runApp(const MainApp());
@@ -11,7 +11,11 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(body: Center(child: Text('Using sqliteraw version ${sample.version()}!'))),
+      home: Scaffold(
+        body: Center(
+          child: Text('Using sqliteraw version ${sample.version()}!'),
+        ),
+      ),
     );
   }
 }

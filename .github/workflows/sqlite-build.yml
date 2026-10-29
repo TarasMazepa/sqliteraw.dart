@@ -15,33 +15,11 @@ env:
     -DSQLITE_ENABLE_GEOPOLY
 
 jobs:
-  sqlite-build-ubuntu-24-04-arm:
-    runs-on: ubuntu-24.04-arm
-
-    steps:
-      - uses: actions/checkout@v7
-
-      - run: |
-          sudo apt-get update
-          sudo apt-get install -y clang
-
-      - run: |
-          clang -fPIC -shared \
-            ${{ env.SQLITE_COMPILE_TIME_OPTIONS }} \
-            sqlite/sqlite3.c \
-            -lpthread -ldl -lm \
-            -o "sqlite3.so"
-          
-          clang \
-            ${{ env.SQLITE_COMPILE_TIME_OPTIONS }} \
-            sqlite/sqlite3.c sqlite/shell.c \
-            -lpthread -ldl -lm \
-            -o "sqlite3"
-          
-          ./sqlite3 --version
-
-  sqlite-build-ubuntu-latest:
-    runs-on: ubuntu-latest
+  sqlite-build:
+    strategy:
+      matrix:
+        os: [ubuntu-24.04-arm, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v7

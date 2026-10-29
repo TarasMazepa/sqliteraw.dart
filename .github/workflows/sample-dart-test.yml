@@ -6,8 +6,11 @@ on:
   pull_request:
 
 jobs:
-  sample-dart-test-ubuntu-24-04-arm:
-    runs-on: ubuntu-24.04-arm
+  sample-dart-test:
+    strategy:
+      matrix:
+        os: [ubuntu-24.04-arm, ubuntu-latest]
+    runs-on: ${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v7
@@ -34,33 +37,3 @@ jobs:
 
       - run: dart test
         working-directory: sample/dart
-
-  sample-dart-test-ubuntu-latest:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v7
-
-      - id: get-dart-version
-        run: echo "dart_sdk_version=$(cat DART_SDK_VERSION)" >> $GITHUB_OUTPUT
-
-      - uses: dart-lang/setup-dart@v1
-        with:
-          sdk: ${{ steps.get-dart-version.outputs.dart_sdk_version }}
-
-      - run: |
-          sudo apt-get update
-          sudo apt-get install -y clang
-
-      - run: dart pub get
-        working-directory: sqliteraw
-
-      - run: dart run ffigen
-        working-directory: sqliteraw
-
-      - run: dart pub get
-        working-directory: sample/dart
-
-      - run: dart test
-        working-directory: sample/dart
-
