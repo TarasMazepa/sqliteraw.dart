@@ -17,6 +17,14 @@ Exploratory scratchpad for backlog ideas, investigative spikes, architectural in
 
 ---
 
+- [ ] **2. Migrate Non-Kebab-Case Markdown Files to `kebab-case`**
+  - **Idea**: Rename remaining uppercase/underscore markdown files to pure `kebab-case` per `agents.md` and update any internal or workflow references to them.
+  - **Context**: `repository-seed` standardized markdown naming to pure `kebab-case` (`agents.md`, `readme.md`, `tolooks.md`, `more-agents.md`).
+  - **Investigation**:
+    - [ ] Rename `README.md` → `readme.md` and update references
+    - [ ] Rename `TOLOOKS.md` → `tolooks.md` and update references
+    - [ ] Rename `sample/flutter/ios/Runner/Assets.xcassets/LaunchImage.imageset/README.md` → `sample/flutter/ios/Runner/Assets.xcassets/LaunchImage.imageset/readme.md` and update references
+
 ## Resolved Architectural Decisions
 
 *(No resolved architectural decisions recorded yet.)*
